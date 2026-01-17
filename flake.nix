@@ -9,19 +9,11 @@
     let
       pkgs = nixpkgs.legacyPackages.${system};
       tex = pkgs.texlive.combine {
-          inherit (pkgs.texlive) scheme-full latex-bin latexmk biber 
-          float
-          adjustbox
-          etoolbox
-          fontspec
-          xkeyval
-          collectbox
-          multirow
-          pgf
-          paralist
-          makecell
-          amsmath
-          amsfonts
+          inherit (pkgs.texlive) scheme-full
+          latexmk biber biblatex
+          # Other CTAN packages 
+          index nomencl
+          pygmentex
           ;
       };
     in rec {
@@ -38,7 +30,7 @@
               SOURCE_DATE_EPOCH=$(date -d "2021-11-30" +%s) \
               latexmk -interaction=nonstopmode -pdf -lualatex \
               -pretex="\pdfvariable suppressoptionalinfo 512\relax" \
-              -usepretex elteikthesis_hu.tex
+              -usepretex -bibtex elteikthesis_hu.tex
           '';
           installPhase = ''
             mkdir -p $out
