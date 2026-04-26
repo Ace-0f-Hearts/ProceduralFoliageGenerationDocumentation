@@ -3,22 +3,70 @@
 \todo{Felhasználói dokumentáció}
 
 
-Procedurális növényzet generálására több létező megoldás is található attól függően, hogy milyen céljaink, illetve kritériumaink vannak. Szempont lehet, hogy a vegetáció mennyire ítélhető realisztikusnak, mekkora területet fed le, milyen környezeti befolyásoló tényezők hatnak a növényekre és azok terjedésére. Ezen követelmények rendkívül fontosak lehetnek nagy, nyíltterű videójátékoknál, szimulációs szoftvereknél, illetve egyéb olyan eszközöknél, ahol egy-egy létező tájat szeretnék életszerűen lemodellezni. Minél valósabb eredményeket szeretnék elérni, annál több információ szükséges az adott módszerhez. Ezért is érdemes lehet különböző multidiszciplináris módszerekkel újabb forrásokat alkalmazni, és az ezeket körülvevő ökoszisztémára támaszkodni. 
+\section{Megoldandó probléma}
+Procedurális növényzet generálására több létező megoldás is található attól függően, hogy milyen céljaink, illetve kritériumaink vannak. Szempont lehet, hogy a vegetáció mennyire ítélhető realisztikusnak, mekkora területet fed le, milyen környezeti befolyásoló tényezők hatnak a növényekre és azok terjedésére. Ezen követelmények rendkívül fontosak lehetnek nagy, nyíltterű videójátékoknál, szimulációs szoftvereknél, illetve egyéb olyan eszközöknél, ahol egy-egy létező tájat szeretnék életszerűen lemodellezni. Minél valósabb eredményeket szeretnék elérni, annál több információ szükséges az adott módszerhez. Ezért is érdemes lehet különböző multidiszciplináris módszerekkel újabb forrásokat alkalmazni, és az ezeket körülvevő ökoszisztémára támaszkodni.\newline
 
-Természetesen adódik így, hogy az előbb leírt problémára érdemes olyan eszközöket kézbe venni, amelyek alaból egy-egy terület helyezkedéséről, növényvilágáról és felbontásáról adnak információt tömören, de egyértelműen. A tájfutótérképek pont ilyen elvárásokat betartva vannak megtervezve. Ezek ugyanis egy-egy tetszőleges tájat írnak le a tájfutó versenyzők számára, jelölve a területen megtalálható természetes határokat, érdekességeket, és ember-által készített struktúrákat. Rendeltetésük miatt meg van határozva, hogy mekkora precizitással számolhatnak a felhasználóik. Továbbá a jelölések sztandardizálva van, így meg adva, hogy egy szimbólum mikor és mikor nem használható az egyes esetekben. Összegezve, ezek a térképek egy megfelelően értelmezhető és felhasználató információ forrásnak bizonyulnak az adott tájról és így azon elhelyezkedő növény populációról.
+Természetesen adódik így, hogy az előbb leírt problémára érdemes olyan eszközöket kézbe venni, amelyek alaból egy-egy terület helyezkedéséről, növényvilágáról és felbontásáról adnak információt tömören, de egyértelműen. A tájfutótérképek pont ilyen elvárásokat betartva vannak megtervezve. Ezek ugyanis egy-egy tetszőleges tájat írnak le a tájfutó versenyzők számára, jelölve a területen megtalálható természetes határokat, érdekességeket, és ember-által készített struktúrákat. Rendeltetésük miatt meg van határozva, hogy mekkora precizitással számolhatnak a felhasználóik. Továbbá a jelölések sztandardizálva van, így meg adva, hogy egy szimbólum mikor és mikor nem használható az egyes esetekben. Összegezve, ezek a térképek egy megfelelően értelmezhető és felhasználató információ forrásnak bizonyulnak az adott tájról és így azon elhelyezkedő növény populációról.\newline
 
-Az, hogy milyen szinten szeretnénk a növényzetünket leírni teljesen mértékben applikációtól függ.
-Mivel a felhasznált térképek elsősorban nagyobb területeket szándékoznak leírni, amelyek a valóságban szokszor négyzetkilómétereket jelentenek esetünkben, ezért elsősorban a nagyobb, fásszárú növények leírásával foglalkoztunk. Egy-egy területet belepő fákat vagy bokrokat továbbá sokkal egyszerűbben tudunk mint diszkrét, pontszerű, viszonylag ritkásabban álló objektumokként felfogni. így az elkészült szoftver is hasonló növényekből álló vegetáció leírásának céljával készült.\todo{Itt inkább arra kéne hangsúlyozni, hogy ez egy előfeltétel.}
+Az, hogy milyen szinten szeretnénk a növényzetünket leírni teljesen mértékben applikációtól függ. Mivel a felhasznált térképek elsősorban nagyobb területeket szándékoznak leírni, amelyek a valóságban szokszor négyzetkilómétereket jelentenek esetünkben, ezért elsősorban a nagyobb, fásszárú növények leírásával foglalkoztunk. Egy-egy területet belepő fákat vagy bokrokat továbbá sokkal egyszerűbben tudunk mint diszkrét, pontszerű és viszonylag ritkásabban álló objektumokként felfogni. Az elkészült szoftver is ilyen fajta növényekből álló vegetáció leírásának gondolatával készült.\newline
 
-Az előbbiekben leírt előfeltételt figyelembe véve sikeresen tudunk három tulajdonságot megállapítani az generált növényzet egyedeinek. Ezeket mind a felhasznált orientációs térkép, illetve a növényfajok egyszerűsített leírásából tudjuk megállapítani, és segítségükkel nem csak leírni tudjuk az képzett vegetációt, hanem reprezentatívan meg is tudjuk jeleníteni.
-Első ilyen tulajdonság az egyes egyedek térbeli pozíciója. Itt pozíció alatt két dimenziós térkép koordinátákat értünk, amelyet könnyen át lehet ültetni három dimenzióba is. Ezen koordináták a térképen feltűntetett jelzések alapján, illetve a szimbólumok jelentésének kontextusának tudatában tudjuk kiszámítani. Egyaránt garantálni tudjuk azt, hogy az így megadott növény nem ütközik más, növények növekedését gátló tereptárgyakba vagy területekbe.
-Továbbá minden egyed rendelkezik egy méret attribútummal, amellyel az általa elfoglalt teret kívánjuk leírni. Ez a természetben megtalálható feltételeket modellezi, ahol a különböző növényfajoknak különböző igényeik vannak az elérhető nyersanyagok és élettérerük nagyságának szempontjából. Ez azt is jelenti, hogy azok a egyed, amellyeknek nem adottak a minimum életfeltételek, elpusztulnak. Ezt a jelenséget a szoftver csomag is utánozza, így különböző méretű növények figyelhetőek meg.
+Az előbbiekben leírt előfeltételt figyelembe véve sikeresen tudunk három tulajdonságot megállapítani az generált növényzet egyedeinek \cite{Gasch2022} amennyiben a program által elvárt adatok kellően vannak formázva. Ezeket a paramétereket a felhasznált orientációs térkép és szimbólumainak leíró fájlának segítségével, illetve a növényfajok egyszerűsített leírásából tudjuk megállapítani. \newline
+Első ilyen tulajdonság az egyes egyedek térbeli pozíciója. Itt pozíció alatt két dimenziós térkép koordinátákat értünk, amelyet azonban könnyen át lehet ültetni három dimenzióba is. Ezen koordinátákat a térképen feltűntetett jelzések alapján, illetve a szimbólumok jelentésének tudatában tudja a program kiszámítani. Ennek működése a következőképp történik.
+\newline
 
+\section{Működési elv}
+Az applikáció véletlenszerű koordinátákat határoz meg, úgy hogy ezek mind olyan területeken belül találhatóak, amelyek a növényzet terjedését megengedik. Az így kiszámított koordinátákat leellenőrzi a program, hogy nem esnek-e olyan objektumokkal egybe, pl. utakkal vagy épületekkel, amelyek a valóságban nem engednék egy növény életben maradását. A továbbiakban csakis azokon a pozíciókon allokál egyedeket, amelyek nem buktak meg ezeken a teszteken. Így igyekszik a program garantálni azt, hogy a növények nem ütköznek más, az egyedek növekedését gátló tereptárgyakba, területekbe vagy akár más növény egyedekbe sem. 
+\newline
 
-Gépigény
+Az elkészült növényzet minden egyedéhez rendelve van egy növény faj is, amelyet jelenleg mint további paraméter adunk át a programnak. Itt érdemes megjegyezni, hogy a fajok megadása alapvetően több szempontból is történhet attól függően, hogy milyen adatok állnak rendelkezésre. A témakör megvizsgálásakor egyik ilyen felderített opció volt a magasság térképekből, illetve ún. diffúziós pontokból való faj megállapítás \cite{Gasch2022}. Ennek módja úgy történik, hogy minden növényfajhoz le van írva egy-egy normál eloszlás, amelyek a faj egyedeinek előfordulását határozzák meg tekintve a domborzat magasságát és meredekségét. Ezenkívül megtudunk adni olyan diffúziós pontokat, amelyek egy előre megadott faj terjedését részesítik előnyben a hatósugarukon belül.
+\newline
 
-Min. 8 Gb RAM
+Továbbá minden egyed rendelkezik egy méret attribútummal, amellyel az általa elfoglalt teret kívánjuk leírni. Ez a természetben megtalálható feltételeket modellezi, ahol a különböző növényfajoknak különböző igényeik vannak az elérhető nyersanyagok és élettérerük nagyságának szempontjából. Ez azt is jelenti, hogy azok a egyed, amellyeknek nem adottak a minimum életfeltételek, elpusztulnak. Ezt a jelenséget a szoftver csomag is utánozza, így különböző méretű növények figyelhetőek meg, amelyek így együtt maximalizálni próbálják az általuk lefedett területet.
 
+\newpage
+\section{Szoftver dokumentáció}
 
+\subsection{Szoftver gépigénye}
 
-Telepítés
+Minimális követelmény:
+\begin{itemize}
+    \itemsep0em 
+    \item Tárhely: 2 Gb
+    \item Processzor (CPU): Intel Core i3 5. generációs processzor
+    \item Memória (RAM): 4 Gb
+    \item Grafikus kártya:  
+\end{itemize}
+
+Ajánlott követelmény:
+\begin{itemize}
+    \itemsep0em 
+    \item Tárhely: 4 Gb
+    \item Processzor (CPU): Intel Core i5 5. generációs processzor
+    \item Memória (RAM): 8 Gb
+    \item Grafikus kártya (GPU):
+\end{itemize}
+
+\subsection{Szoftver telepítése}
+\todo{}
+
+\section{Szoftver használata}
+
+\subsection{Navigáció}
+
+1. Megnyíló ablak, UI részei
+
+\todo{}
+
+2. Mozgás
+
+A szoftverben egy három dimenzióban mozgatható kamera segítségével tudjuk a betöltött domborzatot és rajta elterülő növényzetet megtekinteni.
+A felhasználó a számára elérhető kezelő felülettel bal egérgombbal való kattintással tud interakcióba lépni.
+Ezenkívül felhasználói felület egyszerűbb használatának érdekében ezt a fajta mozgást csakis a jobb egérgomb lenyomva tartásával tudjuk végezni a WASD billentyű kombináció segítségével. Továbbá a kamera magasságát a "Shift" és "Space" billenyűk segítségével tudjuk csökkenteni, illetve növelni.
+
+\todo{Folyamat ábra a navigációról}
+
+\subsection{Generálás paraméterei}
+\todo{}
+
+\subsection{Vegetáció betöltése}
+\todo{}

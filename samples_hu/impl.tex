@@ -1,4 +1,64 @@
 \chapter{Fejlesztői dokumentáció}
 \label{ch:impl}
 
-\todo{Fejlesztői dokumentáció}
+\section{Program architektúra}
+
+\section{Növényzet generálási paraméterek}
+
+
+\subsection{Tájfutótérképek}
+
+A tájfutó térképek elsősorban a vegetációt alkotó növényegyedek elszórásához szükséges adatokat tartalmaznak.
+Mint már előzőleg említve lett, két fajta térkép szimbólum típust különböztetünk meg: \todo{tényleg megkéne korábban említeni} egy jelölés akadályozhatja vagy teret adhat egy növényzet terjedésének. Ennek eldöntésének érdekében szükségünk van a térképeken feltüntetett objektumok és velük asszociált szimbólumok kinyerésére és feldolgozására. 
+\newline
+
+\todo{Kód arról, hogy hogyan szerezzük meg az objektumokat és szimbólumokat}
+
+A programcsomag két különböző fájlformátumot tud értelmezni és feldolgozni.
+Az első ilyen formátum az ún. "OCAD" fájlformátum, amely a ".ocd" fájlkiterjesztéssel van leggyakrabban ellátva.
+Ez egy elsősorban az OCAD programcsomag által használt és mellett fejlesztett bináris fájl formátum, amely a orientációs térképeken megtalálható szimbólumat, objektumokat, színeket, stb. kódolja el.
+Előny ennél a formátumnál az, hogy több nagyobb szoftver csomag is ráépül illetve támogatja, így ennél a szoftvernél való támogatottsága is természetesen adódik.
+Nehézsége azonban, hogy az így megformázott fájlok inkább fekete doboz alapon működnek. \todo{Észlelések leírása}
+
+A második támogatott fájlformátum az elsősorban a nyílt-forráskódú "OpenOrienteering Mapper" program által használt ".omap" kiterjesztésü OpenOrienteering fájlformátum. Ez egy XML alapú struktúrában tárolja el a különböző orientációs objektumokat és hozzájuk tartozó szimbólumokat.
+Az OCAD formátummal szemben ez egy sokkal átláthatóbb adathordozónak bizonyult a téma kidolgozása alatt, így implementálása és tesztelése is egyszerűbbnek bizonyult. 
+
+\section{Növények szétszórása}
+
+\section{Növények ütközésvizsgálata objektumokkal}
+
+\section{Rosszul formált térképek kezelése}
+
+Erdő mint szimbólum kihagyása
+
+\section{Egyedek fajhoz való besorolása}
+
+\subsection{Kezdeti egyed halmaz megállapítása}
+
+\subsection{Szomszédossági besorolás}
+
+\section{Vegetáció területének maximalizálása}
+
+\section{Növényzet megjelenítés}
+
+Folyamat leírása:
+
+AlgLib könyvtár használata + Nanoflann (KD fa felépítése szomszédok megtalálására)
+
+Részgráfokra bontás -> Mely növények vannak közel egymáshoz, ezek tudják egymást "méretét" korlátozni
+
+Részgráfok felépítése, majd egymás közötti relációk felépítése AlgLib számára
+
+Optimalizáció elvégzése
+
+0 nagyságú növények eltávolítása
+
+Folyamat megismétlése hogy a méreteket stabilizáljuk
+
+Megfontonlandó dolgok:
+
+Az eredmények pontossága -> Meg lehet figyelni, hogy egyes lineáris megkötések, amelyek a növények közötti távolságon alapulnak, nem fognak teljesülni, olyan 0.00001-es nagyságrendűleg pontatlanság figyelhető meg
+
+Okok: Optimalizációs folyamat megállási paraméterein kell fejleszteni -> Milyen paraméterek lennének esetünkben megfelelőek
+\todo{}
+
