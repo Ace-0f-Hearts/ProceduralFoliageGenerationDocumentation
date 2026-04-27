@@ -5,11 +5,15 @@
 
 \section{Növényzet generálási paraméterek}
 
+\subsection{Kategorizált szimbólum lista}
 
+\subsection{Magasság térkép}
+
+\subsection{Növényfajok leíró listája}
 \subsection{Tájfutótérképek}
-
-A tájfutó térképek elsősorban a vegetációt alkotó növényegyedek elszórásához szükséges adatokat tartalmaznak.
-Mint már előzőleg említve lett, két fajta térkép szimbólum típust különböztetünk meg: \todo{tényleg megkéne korábban említeni} egy jelölés akadályozhatja vagy teret adhat egy növényzet terjedésének. Ennek eldöntésének érdekében szükségünk van a térképeken feltüntetett objektumok és velük asszociált szimbólumok kinyerésére és feldolgozására.
+\todo{tájfutó térképek mivolta}
+Az argumentumként megadott tájfutótérképek elsősorban a vegetációt alkotó növényegyedek szétszórásához szükséges adatokat tartalmaznak, amelyeket az általuk alkalmazott sztenderdek értelmezésével tud a program kinyerni. Ezek a sztenderdek\todo{szinonima} eredetileg arra hivatottak, hogy egy keretrendszert adjanak a különböző tájakon megtalálható domborzati formációk, navigálási kiindulópontok és ember-által készített struktúrák leírására. A különböző sztenderekbe tartozó jelölések értelmezésével azonban lehetséges kategorizálni a szimbólumokat olyan szempontból, hogy engedik-e vagy akadályozzák-e a szimulált növényzet terjedését. 
+\todo{Diagram, ahol meg van mutatva egy példában egy növényzetet támogató és nem támogató terület}
 \newline
 
 \todo{Kód arról, hogy hogyan szerezzük meg az objektumokat és szimbólumokat}
@@ -21,11 +25,39 @@ Előny ennél a formátumnál az, hogy több nagyobb szoftver csomag is ráépü
 Nehézsége azonban, hogy az így megformázott fájlok inkább fekete doboz alapon működnek. \todo{Észlelések leírása}
 \newline
 A második támogatott fájlformátum az elsősorban a nyílt-forráskódú "OpenOrienteering Mapper" program által használt ".omap" kiterjesztésü OpenOrienteering fájlformátum. Ez egy XML alapú struktúrában tárolja el a különböző orientációs objektumokat és hozzájuk tartozó szimbólumokat.
-Az OCAD formátummal szemben ez egy sokkal átláthatóbb adathordozónak bizonyult a téma kidolgozása alatt, így implementálása és tesztelése is egyszerűbbnek bizonyult. 
+Az OCAD formátummal szemben ez egy sokkal átláthatóbb adathordozónak bizonyult a téma kidolgozása alatt, így implementálása és tesztelése is egyszerűbbnek bizonyult.
 
-\todo{Talán itt érdemes megemlíteni a georeferálást is, hiszen mindkettő formátumról tárgyaltunk keveset, és mindkettőben fontos}
+Összeségében mindkettő formátum ugyanazon információkat hordozza az egyes térképeknél. Emiatt két vizuálisan és tartalmilag azonos, de különböző formátumú térkép esetén azonos eredményeket kell kapnunk. Ez gyakorlatban csupán a kezdeti koordináták pszeudo-véletlenszerűsítése miatt nincs így.
 
-\section{Növények szétszórása}
+
+\todo{Sztenderek megemlítése}
+
+
+\section{Térképek beolvasása}
+
+Az orientációs térképekből három fajta információ szükséges a generálás elvégzéséhez:
+1. Objektumok, amelyekkel való metszés vizsgálatok segítségével el tudjuk dönteni, hogy egy adott koordinátán szereplő növény ütközésbe kerülne-e bármivel.
+2. Szimbólumok, amelyet segítségével kategorizálni tudjuk az objektumok influenciáját a generálás eredményére.
+3. Georeferencia értékek, amely egyrészt az objektumok projektív és térkép koordináták közötti konvertáláshoz szükséges. Ez azért is szükséges, hogy a térképen való pozícináláshoz használt egy egységnyi hosszúság meg egyezzen az általunk használtal.
+
+Az általunk használt tájékozódási futó térképek alapvetően három fajta objektummal dolgoznak: pontszerű objektumokkal, zárt utakkal és nyílt utakkal. Ezen utóbbi utak állhatnak egyenes szakaszokból, illetve Bézier görbékből, amelyeknek pontjai speciális módon vannak eltárolva. Ezeket, a generálás későbbi lépéseiben előforduló metszés vizsgálatok érdekében, mind poli-szakaszokból álló poligonokkal kell közelítenie a programnak, amely olykor valamennyi pontatlansághoz vezethez komplexebb görbék esetén. 
+
+\section{Egyedek koordinátáinak meghatározása}
+
+A vegetáció egyedeinek allokálása az pozíciójuk meghatározásával kezdődik. Ez egy többlépéses folyamat, amelynek ütemei a következő szekciókban vannak taglalva.
+
+\subsection{Expliciten megadott területek esetén}
+
+Az orientációs térképek feldolgozása utána a program számára elérhetőek azon objektumok, amelyekről korábban el lett döntve, hogy megengedik különböző növények elterjedését a területükön. 
+
+Objektumokat befoglaló AABB segítségével uniform módon 
+
+
+
+
+Ez azért fontos számunkra, ugyanis 
+A program által kezelt tájékozódási futó térképek esetén az egyes területek megadhatóak, illetve közelíthetőek poligonok segítségével, amelyeket 
+
 
 \section{Növények ütközésvizsgálata objektumokkal}
 
