@@ -9,7 +9,7 @@
 \subsection{Tájfutótérképek}
 
 A tájfutó térképek elsősorban a vegetációt alkotó növényegyedek elszórásához szükséges adatokat tartalmaznak.
-Mint már előzőleg említve lett, két fajta térkép szimbólum típust különböztetünk meg: \todo{tényleg megkéne korábban említeni} egy jelölés akadályozhatja vagy teret adhat egy növényzet terjedésének. Ennek eldöntésének érdekében szükségünk van a térképeken feltüntetett objektumok és velük asszociált szimbólumok kinyerésére és feldolgozására. 
+Mint már előzőleg említve lett, két fajta térkép szimbólum típust különböztetünk meg: \todo{tényleg megkéne korábban említeni} egy jelölés akadályozhatja vagy teret adhat egy növényzet terjedésének. Ennek eldöntésének érdekében szükségünk van a térképeken feltüntetett objektumok és velük asszociált szimbólumok kinyerésére és feldolgozására.
 \newline
 
 \todo{Kód arról, hogy hogyan szerezzük meg az objektumokat és szimbólumokat}
@@ -19,9 +19,11 @@ Az első ilyen formátum az ún. "OCAD" fájlformátum, amely a ".ocd" fájlkite
 Ez egy elsősorban az OCAD programcsomag által használt és mellett fejlesztett bináris fájl formátum, amely a orientációs térképeken megtalálható szimbólumat, objektumokat, színeket, stb. kódolja el.
 Előny ennél a formátumnál az, hogy több nagyobb szoftver csomag is ráépül illetve támogatja, így ennél a szoftvernél való támogatottsága is természetesen adódik.
 Nehézsége azonban, hogy az így megformázott fájlok inkább fekete doboz alapon működnek. \todo{Észlelések leírása}
-
+\newline
 A második támogatott fájlformátum az elsősorban a nyílt-forráskódú "OpenOrienteering Mapper" program által használt ".omap" kiterjesztésü OpenOrienteering fájlformátum. Ez egy XML alapú struktúrában tárolja el a különböző orientációs objektumokat és hozzájuk tartozó szimbólumokat.
 Az OCAD formátummal szemben ez egy sokkal átláthatóbb adathordozónak bizonyult a téma kidolgozása alatt, így implementálása és tesztelése is egyszerűbbnek bizonyult. 
+
+\todo{Talán itt érdemes megemlíteni a georeferálást is, hiszen mindkettő formátumról tárgyaltunk keveset, és mindkettőben fontos}
 
 \section{Növények szétszórása}
 
