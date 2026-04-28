@@ -1,22 +1,67 @@
 \chapter{Fejlesztői dokumentáció}
 \label{ch:impl}
 
+\todo{Bevezető}
+
 \section{Program architektúra}
+
+\todo{Godot-ról, illetve az exectuion kódról is beszéjünk itt Godot, Generátor terminál program amit meghívunk kapcsolata
+Generátor programban alkalmazott könyvtárak}
+
+Az elkészült program két nagyobb részre taglalható funkcionalitás szempontjából. 
+Az szoftver első nagyobb architektúrális része egy C++ programozási nyelvben megírt, elsősorban terminálból futtatható programrészlet, amely a növényzet generálásáért felel. Mivel a szoftver úgy lett megtervezve, hogy másik applikációknak is futtatni szükséges, így több állítható is paramétere van, amellyel egyrészt a generálás paramétereit tudjunk megválasztani, másrészt a kimeneti értékeinek formátumát és helyét tudjuk változtatni azok egyszerűbb kezelésének érdekében.
+Az így elkészült futtatható állomány több könyvtárat is alkalmaz az általa végzett operációk során, amelyeknek szerepe a generátor lépések leírásánál van részletesen taglalva. \newline
+A második program réteg a nyitott forráskódú Godot játékmotorra, illetve a Mono keretrendszerre épülő, C\# programozási nyelvben megírt programrészlet. Ez a réteg kerül közvetlen kapcsolatba az aktorral és köti össze azt a generálás elvégzésért felelős réteggel, annak érdekében hogy egy átláthatóbb felhasználói élményt nyújtsunk a felhasználó számára. Ezzel a kettéosztással elkerülhetjük azt, hogy a felhasználónak bármilyen terminálban végzett, bonyolultabb munkaműveleteket kelljen végeznie a program használata során. Továbbá ezen komponens egy robosztus alapot ad a generált növényzet reprezentatív vizualizására, amely által a felhasználó képes lesz a szoftvertől kapott eredményeit azonnal megjeleníteni és ellenőrizni.\newline
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth,height=200px]{diagrams/renders/ComponentDiagram.jpg}
+    \caption{Program architektúra, feltüntetve a két nagyobb program komponens és a használt, harmadik-személytől származó könyvtárakat.}
+\end{figure}
 
 \section{Növényzet generálási paraméterek}
 
-\subsection{Kategorizált szimbólum lista}
+\subsection{Szimbólumok leíró listája}
 
-\subsection{Magasság térkép}
+A szimbólumokat leíró adatokat egy listában várja a generáló program egy előre megszabott formai követelménnyel. Egy ilyen leíró adat információt ad az ugyanazon azonosító számmal ellátott jelzéseknek klasszifikálásról, illetve a pontszerű és görbeszerű objektumok méretéről. Továbbá a program csakis azon szimbólummal elláttot objektumokat használja fel, amelyek ezen listában szerepelnek. Ez az implementációs döntés azért is született, mert rengeteg olyan szimbólum is található a különböző tájfutótérkép sztenderdekben amelyek valódi terephez köthető objektumokat nem jelölnek. Ilyenek például a különböző szöveges és dekorációs elemek, vagy a térkép értelmezését segítő jelölések. 
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.35\textwidth,height=100px]{diagrams/renders/SzimbolumLeiras.jpg}
+    \caption{A szimbólumokhoz társított adatok osztály diagramja}
+\end{figure}
+
+\begin{minted}{json}
+[
+  {
+    "id": 101000, //Egy pontszerű szimbólum azonosító száma
+    "flags": 1, //Jelölő bit, jelentése hogy akadályozza növények terjedését
+    "radius": 4 //Objektum sugara a szimbólum súlypontjától mérve
+    //Az objektum saját maga körül 4 egységnyire akadályozza a növények terjedését
+  },
+  {
+    "id": 102000, //Egy nyílt utakból álló szimbólum azonosító száma
+    "flags": 8, //Jelölő bit, jelentése, hogy csakis a térkép befoglaló konkáv burkának megállapítására használt objektumokat jelöl a szimbólum
+    "radius": 0
+  },
+  {
+    "id": 102001, //Egy zárt útból álló terület szimbólum azonosító száma
+    "flags": 0, //Jelölő bit, jelentése hogy a szimbólum megengedi a generált növényzet egyedeinek megmaradását az általa lefedett területen belül
+    "radius": 0
+  },
+]
+
+\end{minted}
 \subsection{Növényfajok leíró listája}
+
+
+
 \subsection{Tájfutótérképek}
-\todo{tájfutó térképek mivolta}
-Az argumentumként megadott tájfutótérképek elsősorban a vegetációt alkotó növényegyedek szétszórásához szükséges adatokat tartalmaznak, amelyeket az általuk alkalmazott sztenderdek értelmezésével tud a program kinyerni. Ezek a sztenderdek\todo{szinonima} eredetileg arra hivatottak, hogy egy keretrendszert adjanak a különböző tájakon megtalálható domborzati formációk, navigálási kiindulópontok és ember-által készített struktúrák leírására. A különböző sztenderekbe tartozó jelölések értelmezésével azonban lehetséges kategorizálni a szimbólumokat olyan szempontból, hogy engedik-e vagy akadályozzák-e a szimulált növényzet terjedését. 
+Az argumentumként megadott tájfutótérképek elsősorban a vegetációt alkotó növényegyedek szétszórásához szükséges adatokat tartalmaznak, amelyeket az általuk alkalmazott sztenderdek értelmezésével tud a program kinyerni. Ezek a szabványok eredetileg arra hivatottak, hogy egy keretrendszert adjanak a különböző tájakon megtalálható domborzati formációk, navigálási kiindulópontok és ember-által készített struktúrák leírására. A különböző sztenderekbe tartozó jelölések értelmezésével azonban lehetséges kategorizálni a szimbólumokat olyan szempontból, hogy engedik-e vagy akadályozzák-e a szimulált növényzet terjedését. 
 \todo{Diagram, ahol meg van mutatva egy példában egy növényzetet támogató és nem támogató terület}
 \newline
 
-\todo{Kód arról, hogy hogyan szerezzük meg az objektumokat és szimbólumokat}
 
 A programcsomag két különböző fájlformátumot tud értelmezni és feldolgozni.
 Az első ilyen formátum az ún. "OCAD" fájlformátum, amely a ".ocd" fájlkiterjesztéssel van leggyakrabban ellátva.
@@ -29,18 +74,35 @@ Az OCAD formátummal szemben ez egy sokkal átláthatóbb adathordozónak bizony
 
 Összeségében mindkettő formátum ugyanazon információkat hordozza az egyes térképeknél. Emiatt két vizuálisan és tartalmilag azonos, de különböző formátumú térkép esetén azonos eredményeket kell kapnunk. Ez gyakorlatban csupán a kezdeti koordináták pszeudo-véletlenszerűsítése miatt nincs így.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth,height=0.5\textwidth]{images/ForestMapSample.jpg}
+    \caption{Példa egy tájékozódási futó térképre amely egyaránt tartalmaz erdős, illetve ember lakta részeket. }
+\end{figure}
 
-\todo{Sztenderek megemlítése}
+\todo{Sztenderdek megemlítése}
 
+\subsection{Magasság térkép}
+
+A növényzet program mint opcinális paraméter várhat egy ún. magasság térképet is. Ezt a magasság térképet ".jpeg", ".jpg" vagy ".png" formátumú fájl elérési útvonalaként kell megadni. Fontos továbbá, hogy ezen argumentum hiánya nem okoz gondot a generálás folyamatában, azonban jelentősen ronthatja a növényzet minőségét. Ez azért is van, mert ebben a textúrában található pixel értékek szerepet játszanak a növény fajok egyedeinek meghatározásában és hiányával elsősorban egy faj dominanciáját lehet megfigyelni a szimulált növényzetben.
+
+\begin{figure}[H]
+    \begin{center}
+        \centering
+        \includegraphics[width=0.3\textwidth,height=0.3\textwidth]{images/BumpMap.jpeg}
+        \caption{Példa egy magasság térképre, amely ún. Perlin zaj alkalmazásával lett generálva. Ez a zaj megfelelő értékeket biztosít egy domborzat pontjai magasságának megadásához.}
+    \end{center}
+\end{figure}
 
 \section{Térképek beolvasása}
+\todo{Kód arról, hogy hogyan szerezzük meg az objektumokat és szimbólumokat}
 
 Az orientációs térképekből három fajta információ szükséges a generálás elvégzéséhez:
 1. Objektumok, amelyekkel való metszés vizsgálatok segítségével el tudjuk dönteni, hogy egy adott koordinátán szereplő növény ütközésbe kerülne-e bármivel.
 2. Szimbólumok, amelyet segítségével kategorizálni tudjuk az objektumok influenciáját a generálás eredményére.
 3. Georeferencia értékek, amely egyrészt az objektumok projektív és térkép koordináták közötti konvertáláshoz szükséges. Ez azért is szükséges, hogy a térképen való pozícináláshoz használt egy egységnyi hosszúság meg egyezzen az általunk használtal.
 
-Az általunk használt tájékozódási futó térképek alapvetően három fajta objektummal dolgoznak: pontszerű objektumokkal, zárt utakkal és nyílt utakkal. Ezen utóbbi utak állhatnak egyenes szakaszokból, illetve Bézier görbékből, amelyeknek pontjai speciális módon vannak eltárolva. Ezeket, a generálás későbbi lépéseiben előforduló metszés vizsgálatok érdekében, mind poli-szakaszokból álló poligonokkal kell közelítenie a programnak, amely olykor valamennyi pontatlansághoz vezethez komplexebb görbék esetén. 
+Továbbá az általunk használt tájékozódási futó térképek három fajta objektummal dolgoznak: pontszerű objektumokkal, zárt utakkal és nyílt utakkal. Ezen utóbbi utak állhatnak egyenes szakaszokból, illetve Bézier görbékből, amelyeknek pontjai speciális módon vannak eltárolva. Ezeket, a generálás későbbi lépéseiben előforduló metszés vizsgálatok érdekében, mind poli-szakaszokból álló poligonokkal kell közelítenie a programnak, amely olykor valamennyi pontatlansághoz vezethez komplexebb görbék esetén, viszont a generált növényzetre kevés hatással van.
 
 \section{Egyedek koordinátáinak meghatározása}
 
