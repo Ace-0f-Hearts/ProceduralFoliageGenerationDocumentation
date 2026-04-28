@@ -24,38 +24,60 @@ Továbbá minden egyed rendelkezik egy méret attribútummal, amellyel az által
 \newpage
 \section{Szoftver dokumentáció}
 
-\subsection{Szoftver gépigénye}
+\subsection{Szoftver gép- és szoftverigénye}
 
-\todo{Ezt át kell fogalmazni inkább olyan viszonylatban, hogy milyen paramétereken lett letesztelve az adott program}
+A témakör keretein belül elkészített szoftver csomag az alábbi operációs rendszereken lett letesztelve, illetve elérhetővé téve:
 \begin{itemize}
-    \itemsep0em 
-    \item Tárhely: 2 Gb
-    \item Processzor (CPU): Intel Core i3 5. generációs processzor
-    \item Memória (RAM): 4 Gb
-    \item Grafikus kártya:  
+    \itemsep0em
+    \item NixOS, x86_48 archiketúrán\todo{}
 \end{itemize}
 
-Ajánlott követelmény:
+A szoftver ezen kívül egyéb operációs rendszerekre is fordítható és azokon futtatható lehet, azonban nem elvárt, hogy az így összeállított futtatható állomány rendeltetésének megfelelően működjön és stabil eredményeket hozzon használata során.
+
+A szoftver továbbá az alábbi specifikációjú gépen lett le tesztelve:
+
 \begin{itemize}
-    \itemsep0em 
-    \item Tárhely: 4 Gb
-    \item Processzor (CPU): Intel Core i5 5. generációs processzor
-    \item Memória (RAM): 8 Gb
-    \item Grafikus kártya (GPU):
+    \itemsep0em
+    \item CPU:
+    \item RAM:
 \end{itemize}
+
+Az elkészült applikáció ezen kívül egyéb, objektívan alacsonyabb teljesítménnyel rendelkező hardveren is futtatható lehet, azonban használatának minőségéről és az adott eredményeknek pontosságáról nem lehet garanciát vállalni. 
 
 \subsection{Szoftver telepítése}
-\todo{}
+Az előre összecsomagolt bináris állományok segítségével a szoftver rendkívül egyszerűen használható a fentebb megadott platformok esetében.
 
-\section{Szoftver használata}
+\begin{enumerate}
+    \itemsep0em
+    \item Töltse le a felhasználó a tömörített állomány a \todo{LINK}
+    \item Bontsa ki a tömörített fájlcsomagot.
+    \item Navigáljon a kibontott könvytárhoz. \todo{Windows} Windows felhasználó esetén  \todo{Linux}
+    \item Indítsa el \todo{program neve}
+\end{enumerate}
 
-\subsection{Navigáció}
+\todo{Lehet felhasználótol nem kéne ezt elvárni}
+% Amennyiben nincsen az felhasználó által használt operációs rendszerhez előre lefordított programcsomag, a következő lépésekben megpróbálhatja saját magának összeállítani. Fontos, hogy semmi sem garantálja, hogy a felhasználó rendszerén sikeresen végre hajtható a folyamat.
 
-1. Megnyíló ablak, UI részei
+% \begin{enumerate}
+%     \itemsep0em
+%     \item Navigáljon a program \todo{github link} kódbázisát tartalmazó weboldalra, majd a képen mutatott módon töltse le tömörített formában a forráskódot.
+%     \item Bontsa ki a forráskódot tartalmazó tömörített állományt.
+% \end{enumerate}
 
-\todo{}
+\section{Szoftver navigálása és használata}
 
-2. Mozgás
+Az applikáció futtatásakor az \todo{illusztrációra utalás} látható egyszerű kezelőfelületet és három dimenziós környezetet tartalmazó ablak fogadja a felhasználót.
+A szoftver kezdeti kezelőfelülete az ablak felső szegélyét végig követő menügombokból áll, amelyek segítségével a felhasználó képes új növényzet generálását kezdeményezni, egy tetszőleges meglévő növényzet konfigurációt betölteni, vagy a program beállításait kezelni.
+
+\todo{képernyőképek a popup-okról}
+
+A "Generation" feliratú gombra rákattintva az aktor képest egy új ablakot előhívni, amelynél procedurális generáláskor alkalmazott bemeneti paramétereket lehet megadni.
+Az itt elvárt paraméterek a következők
+\todo{itt lehetne a képen jelölő szimbólumokkal utalni, és egy listában kifejteni az inputokat}
+
+A "Load" felirattal ellátott gombra kattintva egy újabb ablak jelenik meg, amely ahol egy korábban elkészített konfigurációs fájlhoz vezető elérésiútvonalat tud megadni a felhasználó. Ez által képes egy régebbi generálás eredményét újra betölteni és megtekinteni a programban, amennyiben annak értékeivel nem lett temperálva\todo{Ez lehet ide nem kell}.
+
+A "Settings" feliratú gombbal való interakció során képes a felhasználó egy harmadik fajta lebegő ablakot előhozni, ahol lehetősége van a felhasználónak a programból biztonságosan \todo{kilépés funkció} kilépni.\todo{Itt még ell kell dönteni, hogy mi legyen azzal majd, megmaradjon-e vagy nem}
 
 A szoftverben egy három dimenzióban mozgatható kamera segítségével tudjuk a betöltött domborzatot és rajta elterülő növényzetet megtekinteni.
 A felhasználó a számára elérhető kezelő felülettel bal egérgombbal való kattintással tud interakcióba lépni.
@@ -63,8 +85,3 @@ Ezenkívül felhasználói felület egyszerűbb használatának érdekében ezt 
 
 \todo{Folyamat ábra a navigációról}
 
-\subsection{Generálás paraméterei}
-\todo{}
-
-\subsection{Vegetáció betöltése}
-\todo{}

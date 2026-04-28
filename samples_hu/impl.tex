@@ -55,7 +55,10 @@ A szimbólumokat leíró adatokat egy listában várja a generáló program egy 
 
 \subsection{Növényfajok leíró listája}
 
+A növényfajok leírását egy JSON formátum alapú fájlban várja a program, úgy hogy mindegyik fajhoz rendelt struktúrának a \todo{ábra utalás} ábrán bemutatott adatokat kell tartalmaznia. Ezeknek az adatoknak az értéke ugyanis meghatározza a fajok azonosításának számát, minimum és maximum területi igényeit, illetve előfordulások normál eloszlását a domborzat magasságának és meredekségének szempontjából.
+Fontos, hogy mind a minimum és maximum területi igények\todo{Erre lehet kéne jobb szó}, mind a normál eloszlást leíró csúcs, átlag és szórás pozitív vagy nulla értékeket várnak el a megfelelő operálás érdekében.
 
+\todo{Példa JSON magyarázattal}
 
 \subsection{Tájfutótérképek}
 Az argumentumként megadott tájfutótérképek elsősorban a vegetációt alkotó növényegyedek szétszórásához szükséges adatokat tartalmaznak, amelyeket az általuk alkalmazott sztenderdek értelmezésével tud a program kinyerni. Ezek a szabványok eredetileg arra hivatottak, hogy egy keretrendszert adjanak a különböző tájakon megtalálható domborzati formációk, navigálási kiindulópontok és ember-által készített struktúrák leírására \cite{iof2026}. A különböző sztenderekbe tartozó jelölések értelmezésével azonban lehetséges kategorizálni a szimbólumokat olyan szempontból, hogy engedik-e vagy akadályozzák-e a szimulált növényzet terjedését. 
@@ -104,6 +107,17 @@ A növényzet program mint opcinális paraméter várhat egy ún. magasság tér
         \caption{Példa egy magasság térképre, amely ún. Perlin zaj alkalmazásával lett generálva. Ez a zaj megfelelő értékeket biztosít egy domborzat pontjai magasságának megadásához.}
     \end{center}
 \end{figure}
+
+\subsection{Diffúziós pontok}
+
+A gen
+
+Olykor egy-egy növényzetben nagyobb diverzitás érdekében bevezethetünk úgy nevezett diffúziós pontokat.
+A diffúziós pontok alatt olyan pontokat értünk, amelyekhez egy tetszőlegs középpont illetve sugár van rendelve egy növényfaj azonosítójával együtt.
+A növényegyedek fajának meghatározása során ezeket a különböző diffúziós pontokhoz vett távolság egy fordítottan arányos módon ad.
+\todo{Ezt még át kell gondolni, meg itt igazából az a gond, hogy a diffúziós pontok kontribúciójának magyarázata jobban illene a folyamatok leírásához.} 
+
+\subsection{Egyéb opcionális argumentumok}
 
 \section{Térképek beolvasása}
 \todo{Kód arról, hogy hogyan szerezzük meg az objektumokat és szimbólumokat}
