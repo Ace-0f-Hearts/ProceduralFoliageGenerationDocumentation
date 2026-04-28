@@ -21,6 +21,7 @@ Az elkészült növényzet minden egyedéhez rendelve van egy növény faj is, a
 
 Továbbá minden egyed rendelkezik egy méret attribútummal, amellyel az általa elfoglalt teret kívánjuk leírni. Ez a természetben megtalálható feltételeket modellezi, ahol a különböző növényfajoknak különböző igényeik vannak az elérhető nyersanyagok és élettérerük nagyságának szempontjából. Ez azt is jelenti, hogy azok az egyedek, amelyeknek nem adottak a minimum életfeltételek, elpusztulnak. Ezt a jelenséget a szoftver csomag is utánozza, így különböző méretű növények figyelhetőek meg, amelyek így együtt maximalizálni próbálják az általuk lefedett területet.
 
+\todo{Ezt nézzük át, hogy lehet-e még fejleszteni}
 \newpage
 \section{Szoftver dokumentáció}
 
@@ -72,31 +73,34 @@ A szoftver kezdeti kezelőfelülete az ablak felső szegélyét végig követő 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\textwidth,height=160px]{images/kezdokepernyo.jpg}
+    \includegraphics[width=0.9\textwidth,height=240px]{images/kezdokepernyo.jpg}
     \caption{Kezdőképernyő az applikáció futtatásakor.}
     \label{fig:kezdokepernyo}
 \end{figure}
 
 
-\todo{képernyőképek a popup-okról}
+\todo{Ez az oldal vágás nem igazán szép}
 
 A "Generate" feliratú gombra rákattintva az aktor képest egy új ablakot előhívni, amelynél procedurális generáláskor alkalmazott bemeneti paramétereket lehet megadni.
 Az ablak bal oldalán a különböző paraméterek mező találhatóak, míg az ablak beoldalán az egyes megadott argumentumok helyességéről és tartalmáról ad információt a program.
 
-\todo{itt lehetne a képen jelölő szimbólumokkal utalni, és egy listában kifejteni az inputokat}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\textwidth,height=160px]{images/generalas_ablak.jpg}
+    \includegraphics[width=0.9\textwidth,height=240px]{images/generalas_ablak.jpg}
     \caption{Újabb övényzet generálását szabályzására alkalmas felnyiló ablak.}
     \label{fig:generalas_ablak}
 \end{figure}
 
 A "Load" felirattal ellátott gombra kattintva egy újabb ablak jelenik meg, amely ahol egy korábban elkészített konfigurációs fájlhoz vezető elérésiútvonalat tud megadni a felhasználó. Ez által képes egy régebbi generálás eredményét újra betölteni és megtekinteni a programban.
 
+A növényzet betöltésének befejeztével a felhasználó előtt megjelenik a számítások alatt használt domborzat térkép, illetve a generált növényzet. Érdemes megjegyezni, hogy a növényeknél használt testhálók nem reprezentatívak a növények tényleges faját illetően. Ennek teljesítménybeli, illetve korlátozott erőforrásbeli okai vannak.
+ \todo{Ezt talán inkább az impl. részbe kéne} 
+
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\textwidth,height=160px]{images/betoltes_ablak.jpg}
+    \includegraphics[width=0.9\textwidth,height=240px]{images/betoltes_ablak.jpg}
     \caption{Korábbi növényzet konfiguráció betöltését végző ablak.}
     \label{fig:betoltes_ablak}
 \end{figure}
@@ -108,7 +112,7 @@ Továbbá az "Options" nevezetű legördülő menüsegítségével képes a felh
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\textwidth,height=160px]{images/beallitasok_ablak.jpg}
+    \includegraphics[width=0.9\textwidth,height=240px]{images/beallitasok_ablak.jpg}
     \caption{A program beállításait megjelenítő és szabályzó ablak.}
     \label{fig:beallitasok_ablak}
 \end{figure}
@@ -123,4 +127,5 @@ Ezenkívül felhasználói felület egyszerűbb használatának érdekében ezt 
     \caption{A felhasználói réteg használati eset diagramja}
     \label{fig:godot_hasznalati_eset}
 \end{figure}
+
 
