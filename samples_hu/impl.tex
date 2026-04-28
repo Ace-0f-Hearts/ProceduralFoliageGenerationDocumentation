@@ -51,20 +51,31 @@ A szimbólumokat leíró adatokat egy listában várja a generáló program egy 
     "radius": 0
   },
 ]
-
 \end{minted}
+
 \subsection{Növényfajok leíró listája}
 
 
 
 \subsection{Tájfutótérképek}
-Az argumentumként megadott tájfutótérképek elsősorban a vegetációt alkotó növényegyedek szétszórásához szükséges adatokat tartalmaznak, amelyeket az általuk alkalmazott sztenderdek értelmezésével tud a program kinyerni. Ezek a szabványok eredetileg arra hivatottak, hogy egy keretrendszert adjanak a különböző tájakon megtalálható domborzati formációk, navigálási kiindulópontok és ember-által készített struktúrák leírására. A különböző sztenderekbe tartozó jelölések értelmezésével azonban lehetséges kategorizálni a szimbólumokat olyan szempontból, hogy engedik-e vagy akadályozzák-e a szimulált növényzet terjedését. 
+Az argumentumként megadott tájfutótérképek elsősorban a vegetációt alkotó növényegyedek szétszórásához szükséges adatokat tartalmaznak, amelyeket az általuk alkalmazott sztenderdek értelmezésével tud a program kinyerni. Ezek a szabványok eredetileg arra hivatottak, hogy egy keretrendszert adjanak a különböző tájakon megtalálható domborzati formációk, navigálási kiindulópontok és ember-által készített struktúrák leírására \cite{iof2026}. A különböző sztenderekbe tartozó jelölések értelmezésével azonban lehetséges kategorizálni a szimbólumokat olyan szempontból, hogy engedik-e vagy akadályozzák-e a szimulált növényzet terjedését. 
 \todo{Diagram, ahol meg van mutatva egy példában egy növényzetet támogató és nem támogató terület}
 \newline
 
+\begin{figure}[H]
+  \centering
+  \subcaptionbox{ISOM 2017 szabványt követő tájfutótérkép, amely a "401 Open land", "521 Building" és "405 Forest" szimbólumokkal elláttot területeket tartalmaz.}{
+    \includegraphics[width = 0.35 \linewidth, height = 100px]{images/peldaterkep.jpg}
+  }
+  \hspace{5pt}
+  \subcaptionbox{A térkép alapján generált növényzet. A színes pontok a vegetáció egyedeit, a kékkel színezett területek a növényzet terjedését akadályozó tényezőket mutatják.}{
+    \includegraphics[width = 0.35 \linewidth, height = 100px]{images/peldanovenyzet.jpeg}
+  }
+  \caption{A térképen található sárga és fekete jelölések olyan területeket reprezentálnak, ahol nem találhatóak jelentősebb fásszárú, növényzetet alkotót növények. A nagyobb területek között elterűlő fehérrel jelölt területek ezzel szemben tartalmazhatják az utóbbiakat.}
+\end{figure}
 
 A programcsomag két különböző fájlformátumot tud értelmezni és feldolgozni.
-Az első ilyen formátum az ún. "OCAD" fájlformátum, amely a ".ocd" fájlkiterjesztéssel van leggyakrabban ellátva.
+Az első ilyen formátum az ún. "OCAD" fájlformátum \cite{ocad2026}, amely a ".ocd" fájlkiterjesztéssel van leggyakrabban ellátva.
 Ez egy elsősorban az OCAD programcsomag által használt és mellett fejlesztett bináris fájl formátum, amely a orientációs térképeken megtalálható szimbólumat, objektumokat, színeket, stb. kódolja el.
 Előny ennél a formátumnál az, hogy több nagyobb szoftver csomag is ráépül illetve támogatja, így ennél a szoftvernél való támogatottsága is természetesen adódik.
 Nehézsége azonban, hogy az így megformázott fájlok inkább fekete doboz alapon működnek. \todo{Észlelések leírása}
