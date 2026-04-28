@@ -29,7 +29,7 @@ Továbbá minden egyed rendelkezik egy méret attribútummal, amellyel az által
 A témakör keretein belül elkészített szoftver csomag az alábbi operációs rendszereken lett letesztelve, illetve elérhetővé téve:
 \begin{itemize}
     \itemsep0em
-    \item NixOS, x86_48 archiketúrán\todo{}
+    \item Linux, NixOS, x86\_64 archiketúrával
 \end{itemize}
 
 A szoftver ezen kívül egyéb operációs rendszerekre is fordítható és azokon futtatható lehet, azonban nem elvárt, hogy az így összeállított futtatható állomány rendeltetésének megfelelően működjön és stabil eredményeket hozzon használata során.
@@ -38,8 +38,8 @@ A szoftver továbbá az alábbi specifikációjú gépen lett le tesztelve:
 
 \begin{itemize}
     \itemsep0em
-    \item CPU:
-    \item RAM:
+    \item CPU: AMD Ryzen 7 5800
+    \item RAM: 8Gb 
 \end{itemize}
 
 Az elkészült applikáció ezen kívül egyéb, objektívan alacsonyabb teljesítménnyel rendelkező hardveren is futtatható lehet, azonban használatának minőségéről és az adott eredményeknek pontosságáról nem lehet garanciát vállalni. 
@@ -49,7 +49,7 @@ Az előre összecsomagolt bináris állományok segítségével a szoftver rendk
 
 \begin{enumerate}
     \itemsep0em
-    \item Töltse le a felhasználó a tömörített állomány a \todo{LINK}
+    \item\label{step:first} Töltse le a felhasználó a tömörített állományt a \todo{LINK}
     \item Bontsa ki a tömörített fájlcsomagot.
     \item Navigáljon a kibontott könvytárhoz. \todo{Windows} Windows felhasználó esetén  \todo{Linux}
     \item Indítsa el \todo{program neve}
@@ -64,24 +64,63 @@ Az előre összecsomagolt bináris állományok segítségével a szoftver rendk
 %     \item Bontsa ki a forráskódot tartalmazó tömörített állományt.
 % \end{enumerate}
 
+\newpage
 \section{Szoftver navigálása és használata}
 
-Az applikáció futtatásakor az \todo{illusztrációra utalás} látható egyszerű kezelőfelületet és három dimenziós környezetet tartalmazó ablak fogadja a felhasználót.
+Az applikáció futtatásakor az \todo{illusztrációra utalás} \ref{fig:kezdokepernyo} ábrán látható egyszerű kezelőfelületet és három dimenziós környezetet tartalmazó ablak fogadja a felhasználót.
 A szoftver kezdeti kezelőfelülete az ablak felső szegélyét végig követő menügombokból áll, amelyek segítségével a felhasználó képes új növényzet generálását kezdeményezni, egy tetszőleges meglévő növényzet konfigurációt betölteni, vagy a program beállításait kezelni.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth,height=160px]{images/kezdokepernyo.jpg}
+    \caption{Kezdőképernyő az applikáció futtatásakor.}
+    \label{fig:kezdokepernyo}
+\end{figure}
+
 
 \todo{képernyőképek a popup-okról}
 
-A "Generation" feliratú gombra rákattintva az aktor képest egy új ablakot előhívni, amelynél procedurális generáláskor alkalmazott bemeneti paramétereket lehet megadni.
-Az itt elvárt paraméterek a következők
+A "Generate" feliratú gombra rákattintva az aktor képest egy új ablakot előhívni, amelynél procedurális generáláskor alkalmazott bemeneti paramétereket lehet megadni.
+Az ablak bal oldalán a különböző paraméterek mező találhatóak, míg az ablak beoldalán az egyes megadott argumentumok helyességéről és tartalmáról ad információt a program.
+
 \todo{itt lehetne a képen jelölő szimbólumokkal utalni, és egy listában kifejteni az inputokat}
 
-A "Load" felirattal ellátott gombra kattintva egy újabb ablak jelenik meg, amely ahol egy korábban elkészített konfigurációs fájlhoz vezető elérésiútvonalat tud megadni a felhasználó. Ez által képes egy régebbi generálás eredményét újra betölteni és megtekinteni a programban, amennyiben annak értékeivel nem lett temperálva\todo{Ez lehet ide nem kell}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth,height=160px]{images/generalas_ablak.jpg}
+    \caption{Újabb övényzet generálását szabályzására alkalmas felnyiló ablak.}
+    \label{fig:generalas_ablak}
+\end{figure}
 
-A "Settings" feliratú gombbal való interakció során képes a felhasználó egy harmadik fajta lebegő ablakot előhozni, ahol lehetősége van a felhasználónak a programból biztonságosan \todo{kilépés funkció} kilépni.\todo{Itt még ell kell dönteni, hogy mi legyen azzal majd, megmaradjon-e vagy nem}
+A "Load" felirattal ellátott gombra kattintva egy újabb ablak jelenik meg, amely ahol egy korábban elkészített konfigurációs fájlhoz vezető elérésiútvonalat tud megadni a felhasználó. Ez által képes egy régebbi generálás eredményét újra betölteni és megtekinteni a programban.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth,height=160px]{images/betoltes_ablak.jpg}
+    \caption{Korábbi növényzet konfiguráció betöltését végző ablak.}
+    \label{fig:betoltes_ablak}
+\end{figure}
+
+A "Settings" feliratú gombbal való interakció során képes a felhasználó egy harmadik fajta lebegő ablakot előhozni, ahol lehetősége van  \todo{kilépés funkció} kilépni.\todo{Itt még ell kell dönteni, hogy mi legyen azzal majd, megmaradjon-e vagy nem}
+
+Továbbá az "Options" nevezetű legördülő menüsegítségével képes a felhasználó a programból biztonságosan kilépni az "Exit" opcióra kattintva.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth,height=160px]{images/beallitasok_ablak.jpg}
+    \caption{A program beállításait megjelenítő és szabályzó ablak.}
+    \label{fig:beallitasok_ablak}
+\end{figure}
 
 A szoftverben egy három dimenzióban mozgatható kamera segítségével tudjuk a betöltött domborzatot és rajta elterülő növényzetet megtekinteni.
 A felhasználó a számára elérhető kezelő felülettel bal egérgombbal való kattintással tud interakcióba lépni.
 Ezenkívül felhasználói felület egyszerűbb használatának érdekében ezt a fajta mozgást csakis a jobb egérgomb lenyomva tartásával tudjuk végezni a WASD billentyű kombináció segítségével. Továbbá a kamera magasságát a "Shift" és "Space" billenyűk segítségével tudjuk csökkenteni, illetve növelni.
 
-\todo{Folyamat ábra a navigációról}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.\textwidth,height=500px]{diagrams/renders/GodotUseCaseDiagram.jpg}
+    \caption{A felhasználói réteg használati eset diagramja}
+    \label{fig:godot_hasznalati_eset}
+\end{figure}
 
