@@ -9,9 +9,9 @@
 Generátor programban alkalmazott könyvtárak}
 
 Az elkészült program két nagyobb részre taglalható funkcionalitás szempontjából. 
-Az szoftver első nagyobb architektúrális része egy C++ programozási nyelvben megírt, elsősorban terminálból futtatható programrészlet, amely a növényzet generálásáért felel. Mivel a szoftver úgy lett megtervezve, hogy másik applikációknak is futtatni szükséges, így több állítható is paramétere van, amellyel egyrészt a generálás paramétereit tudjunk megválasztani, másrészt a kimeneti értékeinek formátumát és helyét tudjuk változtatni azok egyszerűbb kezelésének érdekében.
-Az így elkészült futtatható állomány több könyvtárat is alkalmaz az általa végzett operációk során, amelyeknek szerepe a generátor lépések leírásánál van részletesen taglalva. \newline
-A második program réteg a nyitott forráskódú Godot játékmotorra, illetve a Mono keretrendszerre épülő, C\# programozási nyelvben megírt programrészlet. Ez a réteg kerül közvetlen kapcsolatba az aktorral és köti össze azt a generálás elvégzésért felelős réteggel, annak érdekében hogy egy átláthatóbb felhasználói élményt nyújtsunk a felhasználó számára. Ezzel a kettéosztással elkerülhetjük azt, hogy a felhasználónak bármilyen terminálban végzett, bonyolultabb munkaműveleteket kelljen végeznie a program használata során. Továbbá ezen komponens egy robosztus alapot ad a generált növényzet reprezentatív vizualizására, amely által a felhasználó képes lesz a szoftvertől kapott eredményeit azonnal megjeleníteni és ellenőrizni.\newline
+Az szoftver architektúra első nagyobb része egy C++ programozási nyelvben elkészített, elsősorban terminálból futtatható programrészlet, amely egy növényzet procedurális generálását hajtja végre. Az így elkészült projekt felépítéséhez, teszteléséhez és struktúráláshoz a CMake eszközcsomag lett használva, amely kifinomult beállítási és kezelési lehetőségeket adott elkészítése során. Ezen programrészlet elkészítésénél továbbá az is célként lett kitűzve, hogy egy másik applikációs réteg is képes legyen egyszerűen futtatni futtatni. Ennek megvalósításának érdekében így több bemeneti paramétere is állítható a programnak, illetve a kimeneti értékeinek formátumát is meg tudjuk változtatni azok könnyebb kezelésének érdekében.
+Az így elkészült futtatható állomány több könyvtárat is alkalmaz az általa végzett operációk során, amelyeknek szerepe a generátor lépések leírásánál van részletesen taglalva. Nagyrészük a Microsoft által létrehozott VCPKG csomagkezelő rendszerrel segítségével lett kezelve, ugyanis ez egy robosztus és több platformon használható megoldásnak bizonyult. \newline
+A második program réteg a nyitott forráskódú Godot játékmotorra, illetve a Mono keretrendszerre épülő, C\# programozási nyelvben megírt programrészlet. Ez a réteg kerül közvetlen kapcsolatba az aktorral és köti össze azt a generálás elvégzésért felelős rendszerrel. Ennek oka, hogy egy átláthatóbb felhasználói élményt lehet a nyújtani ezzel a megoldással, illetve nyilvánvalóbb és egyértelműbb visszajelzéseket tud a program a felhasználónak adni. Ezzel a kettéosztással elkerülhetjük azt, hogy a felhasználónak bármilyen terminálban végzett, bonyolultabb munkaműveleteket kelljen végeznie a program használata során. Továbbá ezen komponens egy robosztus alapot ad a generált növényzet reprezentatív vizualizására, amely által a felhasználó képes lesz a szoftvertől kapott eredményeit azonnal megjeleníteni és ellenőrizni.\newline
 
 
 \begin{figure}[H]
@@ -81,7 +81,7 @@ A programcsomag két különböző fájlformátumot tud értelmezni és feldolgo
 Az első ilyen formátum az ún. "OCAD" fájlformátum \cite{ocad2026}, amely a ".ocd" fájlkiterjesztéssel van leggyakrabban ellátva.
 Ez egy elsősorban az OCAD programcsomag által használt és mellett fejlesztett bináris fájl formátum, amely a orientációs térképeken megtalálható szimbólumat, objektumokat, színeket, stb. kódolja el.
 Előny ennél a formátumnál az, hogy több nagyobb szoftver csomag is ráépül illetve támogatja, így ennél a szoftvernél való támogatottsága is természetesen adódik.
-Nehézsége azonban, hogy az így megformázott fájlok inkább fekete doboz alapon működnek. \todo{Észlelések leírása}
+Nehézsége azonban, hogy az így formázott fájlok inkább fekete doboz alapon működnek. \todo{Észlelések leírása}
 \newline
 A második támogatott fájlformátum az elsősorban a nyílt-forráskódú "OpenOrienteering Mapper" program által használt ".omap" kiterjesztésü OpenOrienteering fájlformátum. Ez egy XML alapú struktúrában tárolja el a különböző orientációs objektumokat és hozzájuk tartozó szimbólumokat.
 Az OCAD formátummal szemben ez egy sokkal átláthatóbb adathordozónak bizonyult a téma kidolgozása alatt, így implementálása és tesztelése is egyszerűbbnek bizonyult.
@@ -98,7 +98,7 @@ Az OCAD formátummal szemben ez egy sokkal átláthatóbb adathordozónak bizony
 
 \subsection{Magasság térkép}
 
-A növényzet program mint opcinális paraméter várhat egy ún. magasság térképet is. Ezt a magasság térképet ".jpeg", ".jpg" vagy ".png" formátumú fájl elérési útvonalaként kell megadni. Fontos továbbá, hogy ezen argumentum hiánya nem okoz gondot a generálás folyamatában, azonban jelentősen ronthatja a növényzet minőségét. Ez azért is van, mert ebben a textúrában található pixel értékek szerepet játszanak a növény fajok egyedeinek meghatározásában és hiányával elsősorban egy faj dominanciáját lehet megfigyelni a szimulált növényzetben.
+A növényzet program mint opcionális paraméter várhat egy ún. magasság térképet is. Ezt a magasság térképet ".jpeg", ".jpg" vagy ".png" formátumú fájl elérési útvonalaként kell megadni. Fontos továbbá, hogy ezen argumentum hiánya nem okoz gondot a generálás folyamatában, azonban jelentősen ronthatja a növényzet minőségét. Ez azért is van, mert ebben a textúrában található pixel értékek szerepet játszanak a növény fajok egyedeinek meghatározásában és hiányával elsősorban egy faj dominanciáját lehet megfigyelni a szimulált növényzetben.
 
 \begin{figure}[H]
     \begin{center}
@@ -113,7 +113,7 @@ A növényzet program mint opcinális paraméter várhat egy ún. magasság tér
 A gen
 
 Olykor egy-egy növényzetben nagyobb diverzitás érdekében bevezethetünk úgy nevezett diffúziós pontokat.
-A diffúziós pontok alatt olyan pontokat értünk, amelyekhez egy tetszőlegs középpont illetve sugár van rendelve egy növényfaj azonosítójával együtt.
+A diffúziós pontok alatt olyan pontokat értünk, amelyekhez egy tetszőleges középpont illetve sugár van rendelve egy növényfaj azonosítójával együtt.
 A növényegyedek fajának meghatározása során ezeket a különböző diffúziós pontokhoz vett távolság egy fordítottan arányos módon ad.
 \todo{Ezt még át kell gondolni, meg itt igazából az a gond, hogy a diffúziós pontok kontribúciójának magyarázata jobban illene a folyamatok leírásához.} 
 
