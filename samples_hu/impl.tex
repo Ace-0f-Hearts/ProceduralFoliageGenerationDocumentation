@@ -59,6 +59,11 @@ A növényfajok leírását egy JSON formátum alapú fájlban várja a program,
 Fontos, hogy mind a minimum és maximum területi igények\todo{Erre lehet kéne jobb szó}, mind a normál eloszlást leíró csúcs, átlag és szórás pozitív vagy nulla értékeket várnak el a megfelelő operálás érdekében.
 
 \todo{Példa JSON magyarázattal}
+\begin{minted}{json}
+[
+  
+]
+\end{minted}
 
 \subsection{Tájfutótérképek}
 Az argumentumként megadott tájfutótérképek elsősorban a vegetációt alkotó növényegyedek szétszórásához szükséges adatokat tartalmaznak, amelyeket az általuk alkalmazott sztenderdek értelmezésével tud a program kinyerni. Ezek a szabványok eredetileg arra hivatottak, hogy egy keretrendszert adjanak a különböző tájakon megtalálható domborzati formációk, navigálási kiindulópontok és ember-által készített struktúrák leírására \cite{iof2026}. A különböző sztenderekbe tartozó jelölések értelmezésével azonban lehetséges kategorizálni a szimbólumokat olyan szempontból, hogy engedik-e vagy akadályozzák-e a szimulált növényzet terjedését. 
@@ -123,20 +128,44 @@ Az korábban részletezett orientációs térképek formátumokból három fajta
 \begin{itemize}
   \itemsep1em
   \item Objektumok: Az objektumok reprezentálják a térkép által bemutatott területen elhelyezkedő struktúrákat, jelzik azok pozícióját, méretét illetve formáját. Az egyes lépéseknél alkalmazott metszés vizsgálatok ezeknek az objektumokkal hajtódnak végre. Továbbá szerepet játszanak a térkép egész területének elkülönítéséhez, amely a nem jól formázott tájfutótérképek  esetén szükséges. Mindemellett három fajta objektum típust különböztetünk meg, amelyeknek fajtája szerepet játszik a velük végzett műveletek során.
-  \item Szimbólumok: A szimbólumok a velük asszociált objektumok vizuális komponenseit foglalják össze. Programunk ezek azonosító számának segítségével kategorizálja az egyes területek befolyását a generálás eredményére. Ezenkívül a szimbólumok vizsgálatával tudja a program a növényzet szimulálás lépéseinél irreleváns objektumokat kíszűrni. 
+  \item Pontszerű objektumok: Egyetlen egy pontból álló objektumok
+  \item Területet jelző objektumok: Zárt utakból álló objektum, amely által bezárt rész az objektum részét alkotja.
+  \item Utakat jelző objektumok: Zárt vagy nyílt utakból álló tereptárgy, amely által esetlegesen bezárt részt nem képzi részét az objektumnak.
+
+\todo{Osztály diagram Base + Child}
+
+  \item Szimbólumok: A szimbólumok a velük asszociált objektumok vizuális komponenseit foglalják össze. Programunk ezek azonosító számának segítségével kategorizálja az egyes területek befolyását a generálás eredményére. Ezenkívül a szimbólumok vizsgálatával tudja a program a növényzet szimulálás lépéseinél irreleváns objektumokat kiszűrni. Az objektumokhoz hasonlóan itt is három fajta szimbólum típus különböztetünk meg a témakörhöz relevánsan.
+\todo{Osztály diagram Base + Child}
   \item Georeferencia értékek: Többek között a térkép által leírt terület skálázásához, illetve projektív és térkép koordináták közötti konverziókhoz szükséges értékeket fogalja önmagába. Ezek az értékek elsősorban az objektumok koordinátáinak kinyerésénél szükségesek annak érdekében, hogy a valós méretarányokhoz közelebbi eredményeket érjünk el a vegetáció elkészítésekor. 
+\todo{Kódsor a konverzió leírására} 
 \end{itemize}
 
-Továbbá az általunk használt tájékozódási futó térképek három fajta objektummal dolgoznak: pontszerű objektumokkal, zárt utakkal és nyílt utakkal. Ezen utóbbi utak állhatnak egyenes szakaszokból, illetve Bézier görbékből, amelyeknek pontjai speciális módon vannak eltárolva. Ezeket, a generálás későbbi lépéseiben előforduló metszés vizsgálatok érdekében, mind poli-szakaszokból álló poligonokkal kell közelítenie a programnak, amely olykor valamennyi pontatlansághoz vezethez komplexebb görbék esetén, viszont a generált növényzetre kevés hatással van.
+A különböző utakból álló objektumok ún. poli-szakaszokkal vannak megvalósítva. A poli-szakaszok olyan utak, amelyek egyenes szakaszok segítségével vannak összeillesztve. Az eredeti tájfutótérkép formátumokban használt objektumok azonban egyenes szakaszokból, illetve Bézier görbékből is állhatnak, amelyek pontjai speciális módon vannak megadva. A generálás egyes lépéseiben végzett későbbi metszés vizsgálatok, illetve objektumokat befoglaló négyzetek számításának érdekében így szükséges ezen Bézier görbéket további poli-szakaszokkal közelíteni. Ez természetesen valamennyi pontatlansághoz vezethet a komplexebb görbék esetén, viszont a generált növényzetre továbbra is elhanyagolható hatással bír.
+
+\todo{Konverzióról source kód, és citing as code taken from somewhere else}
 
 \section{Egyedek koordinátáinak meghatározása}
 
-A vegetáció egyedeinek allokálása az pozíciójuk meghatározásával kezdődik. Ez egy többlépéses folyamat, amelynek ütemei a következő szekciókban vannak taglalva.
+A vegetáció egyedeinek allokálása azok pozíciójának meghatározásával kezdődik. Ez valójában egy több lépéses folyamat, amelynek ütemei a következő szekciókban vannak taglalva.
+A továbbiakban a növények lehetséges pozíciójára "magként" fogok utalni. Ezek a magon olyan koordinátákat jelölnek tehát, amelyekről még nem tudja a program biztosan eldönteni, hogy valóban allokálhat-e a pozícióra bármilyen növény egyedet.
+Továbbá az egyszerűség kedvéért azon "erdőkként" fogok azon területekre utalni, amelyekre növények terjedhetnek, illetve "tisztásként" olyan területekre, ahova a vegetáció egyedei nem tudnak terjedni.\todo{átfogalmazás} 
 
 \subsection{Expliciten megadott területek esetén}
 
-Az orientációs térképek feldolgozása utána a program számára elérhetőek azon objektumok, amelyekről korábban el lett döntve, hogy megengedik különböző növények elterjedését a területükön. 
+Az orientációs térképek feldolgozása utána a program számára elérhetőek azon objektumok, amelyekről korábban el lett döntve, hogy engedik-e a különböző növények elterjedését a területükön, vagy nem. Továbbá a futtatás ezen a pontján minden objektumhoz meg van határozva egy ún. AABB.\newline Az AABB, angol nevén "Axis-Aligned Bounding Box" , egy tetszőlegesen meghatározott koordináta rendszer tengelyeivel párhuzamos lapok által körbehatárolt téglatest, amellyel hatékonyan lehetséges korai metszés vizsgálatokat elvégezni. Természetesen a program kontextusának esetében két dimenziós AABB-k vannak alkalmazva, amellyel a különböző térképen elterülő objektumokat foglalja közre a program. 
+A program először egyesével dolgozza fel a talált erdőket az alábbi lépésekben:
+\begin{enumerate}
+  \item Az erdő AABB komponensének segítségével allokál magokat a program, úgy hogy azok \begin{math}
+    d \in \mathbb{R}
+  \end{math} uniform távolságra vannak egymástól eleinte mind az X, mind az Y tengelyeket nézve.
+  \item Ezek után a program \begin{math}
+    u,v \in [0,d/2]
+  \end{math} véletlenszerű értékekkel eltolja minden így létrehozott mag pozícióját az X és Y tengelyeken. 
+  \item Ezek után a program ellenőrzi, hogy így kapott magok metszik-e a jelenleg feldolgozott erdőt. Ha nem, akkor az adott mag megbukik a teszten, a program eldobja mint lehetséges pozíció.
+\end{enumerate} 
 
+
+\todo{IDe lehetne mondjuk egy objektum feldolgozását leíró kódrész}
 Objektumokat befoglaló AABB segítségével uniform módon 
 
 
