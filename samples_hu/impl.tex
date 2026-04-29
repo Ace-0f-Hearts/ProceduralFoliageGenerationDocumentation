@@ -74,7 +74,7 @@ Az argumentumként megadott tájfutótérképek elsősorban a vegetációt alkot
   \subcaptionbox{A térkép alapján generált növényzet. A színes pontok a vegetáció egyedeit, a kékkel színezett területek a növényzet terjedését akadályozó tényezőket mutatják.}{
     \includegraphics[width = 0.35 \linewidth, height = 100px]{images/peldanovenyzet.jpeg}
   }
-  \caption{A térképen található sárga és fekete jelölések olyan területeket reprezentálnak, ahol nem találhatóak jelentősebb fásszárú, növényzetet alkotót növények. A nagyobb területek között elterűlő fehérrel jelölt területek ezzel szemben tartalmazhatják az utóbbiakat.}
+  \caption{A térképen található sárga és fekete jelölések leírásukból adódóan olyan területet reprezentálnak, ahol nem találhatóak jelentősebb fásszárú, növényzetet alkotót növények. A nagyobb területek között elterűlő fehérrel jelölt területek ezzel szemben tartalmazhatják az utóbbiakat.}
 \end{figure}
 
 A programcsomag két különböző fájlformátumot tud értelmezni és feldolgozni.
@@ -91,14 +91,14 @@ Az OCAD formátummal szemben ez egy sokkal átláthatóbb adathordozónak bizony
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.65\textwidth,height=0.5\textwidth]{images/ForestMapSample.jpg}
-    \caption{Példa egy tájékozódási futó térképre amely egyaránt tartalmaz erdős, illetve ember lakta részeket. }
+    \caption{Példa egy valós területet leíró tájékozódási futó térképre amely egyaránt tartalmaz erdős, illetve ember lakta részeket. }
 \end{figure}
 
 \todo{Sztenderdek megemlítése}
 
 \subsection{Magasság térkép}
 
-A növényzet program mint opcionális paraméter várhat egy ún. magasság térképet is. Ezt a magasság térképet ".jpeg", ".jpg" vagy ".png" formátumú fájl elérési útvonalaként kell megadni. Fontos továbbá, hogy ezen argumentum hiánya nem okoz gondot a generálás folyamatában, azonban jelentősen ronthatja a növényzet minőségét. Ez azért is van, mert ebben a textúrában található pixel értékek szerepet játszanak a növény fajok egyedeinek meghatározásában és hiányával elsősorban egy faj dominanciáját lehet megfigyelni a szimulált növényzetben.
+A növényzet program mint opcionális paraméter várhat egy ún. magasság térképet is. Ezt a magasság térképet ".jpeg", ".jpg" vagy ".png" formátumú fájl elérési útvonalaként kell megadni. Fontos továbbá, hogy ezen argumentum hiánya nem okozna gondot a generálás folyamatában, azonban jelentősen ronthatja a növényzet minőségét. Ez azért is van, mert ebben a textúrában található pixel értékek szerepet játszanak a növény fajok egyedeinek meghatározásában és hiányával elsősorban egy faj dominanciáját lehet megfigyelni a szimulált növényzetben. Ezért is van elvárva, hogy minden generálás esetén legyen valamilyen magasság térkép alkalmazva.
 
 \begin{figure}[H]
     \begin{center}
@@ -110,22 +110,22 @@ A növényzet program mint opcionális paraméter várhat egy ún. magasság té
 
 \subsection{Diffúziós pontok}
 
-A gen
-
-Olykor egy-egy növényzetben nagyobb diverzitás érdekében bevezethetünk úgy nevezett diffúziós pontokat.
-A diffúziós pontok alatt olyan pontokat értünk, amelyekhez egy tetszőleges középpont illetve sugár van rendelve egy növényfaj azonosítójával együtt.
-A növényegyedek fajának meghatározása során ezeket a különböző diffúziós pontokhoz vett távolság egy fordítottan arányos módon ad.
-\todo{Ezt még át kell gondolni, meg itt igazából az a gond, hogy a diffúziós pontok kontribúciójának magyarázata jobban illene a folyamatok leírásához.} 
+Annak érdekében, hogy a generált növényzet faji diverzitása nagyobb mértékű legyen egy-egy régión belül, \cite{Gasch2022} kutatói papírban ún. diffúziós pontok használat javasolják. Ezek a pontok esetünkben olyan véges sugarú köröket jelölnek, amelyek valamilyen, a vegetációban előforduló növényfaj terjedését segítik elő mesterséges módon a területükön belül. Esetünkben ezeket a pontok véletlenszerűen állítjuk elő a térkép úgy, hogy azok a térkép dimenzión belül maradjanak. A felhasználónak csakis a diffúziós pontok mennyiségén van befolyása, azonban amennyiben a témakör megkívánja, egyszerűen megoldható lenne a pontok manuális megadása is. 
 
 \subsection{Egyéb opcionális argumentumok}
+
+\todo{}
 
 \section{Térképek beolvasása}
 \todo{Kód arról, hogy hogyan szerezzük meg az objektumokat és szimbólumokat}
 
-Az orientációs térképekből három fajta információ szükséges a generálás elvégzéséhez:
-1. Objektumok, amelyekkel való metszés vizsgálatok segítségével el tudjuk dönteni, hogy egy adott koordinátán szereplő növény ütközésbe kerülne-e bármivel.
-2. Szimbólumok, amelyet segítségével kategorizálni tudjuk az objektumok influenciáját a generálás eredményére.
-3. Georeferencia értékek, amely egyrészt az objektumok projektív és térkép koordináták közötti konvertáláshoz szükséges. Ez azért is szükséges, hogy a térképen való pozícináláshoz használt egy egységnyi hosszúság meg egyezzen az általunk használtal.
+Az korábban részletezett orientációs térképek formátumokból három fajta információt használ a program a generálás elvégzéséhez:
+\begin{itemize}
+  \itemsep1em
+  \item Objektumok: Az objektumok reprezentálják a térkép által bemutatott területen elhelyezkedő struktúrákat, jelzik azok pozícióját, méretét illetve formáját. Az egyes lépéseknél alkalmazott metszés vizsgálatok ezeknek az objektumokkal hajtódnak végre. Továbbá szerepet játszanak a térkép egész területének elkülönítéséhez, amely a nem jól formázott tájfutótérképek  esetén szükséges. Mindemellett három fajta objektum típust különböztetünk meg, amelyeknek fajtája szerepet játszik a velük végzett műveletek során.
+  \item Szimbólumok: A szimbólumok a velük asszociált objektumok vizuális komponenseit foglalják össze. Programunk ezek azonosító számának segítségével kategorizálja az egyes területek befolyását a generálás eredményére. Ezenkívül a szimbólumok vizsgálatával tudja a program a növényzet szimulálás lépéseinél irreleváns objektumokat kíszűrni. 
+  \item Georeferencia értékek: Többek között a térkép által leírt terület skálázásához, illetve projektív és térkép koordináták közötti konverziókhoz szükséges értékeket fogalja önmagába. Ezek az értékek elsősorban az objektumok koordinátáinak kinyerésénél szükségesek annak érdekében, hogy a valós méretarányokhoz közelebbi eredményeket érjünk el a vegetáció elkészítésekor. 
+\end{itemize}
 
 Továbbá az általunk használt tájékozódási futó térképek három fajta objektummal dolgoznak: pontszerű objektumokkal, zárt utakkal és nyílt utakkal. Ezen utóbbi utak állhatnak egyenes szakaszokból, illetve Bézier görbékből, amelyeknek pontjai speciális módon vannak eltárolva. Ezeket, a generálás későbbi lépéseiben előforduló metszés vizsgálatok érdekében, mind poli-szakaszokból álló poligonokkal kell közelítenie a programnak, amely olykor valamennyi pontatlansághoz vezethez komplexebb görbék esetén, viszont a generált növényzetre kevés hatással van.
 
@@ -146,9 +146,11 @@ Ez azért fontos számunkra, ugyanis
 A program által kezelt tájékozódási futó térképek esetén az egyes területek megadhatóak, illetve közelíthetőek poligonok segítségével, amelyeket 
 
 
-\section{Növények ütközésvizsgálata objektumokkal}
+\subsection{Növények ütközésvizsgálata objektumokkal}
 
-\section{Rosszul formált térképek kezelése}
+\todo{kd-tree vagy R-tree említése, ezt miért lett volna jobb/rosszabb}
+
+\subsection{Rosszul formált térképek kezelése}
 
 Erdő mint szimbólum kihagyása
 

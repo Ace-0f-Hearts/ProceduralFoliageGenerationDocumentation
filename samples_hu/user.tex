@@ -23,6 +23,12 @@ Az összes egyed rendelkezik ezenkívül egy méret attribútummal, amellyel az 
 
 A program által alkalmazott növény generálási módszernek további célja, hogy az egymáshoz térben közel elhelyezkedő egyedek nagyobb eséllyel tartoznak ugyanazon növényfajhoz. Ez a fajta döntéshozatal is a természetben megtalálható fajok terjedésének folyamatát adott szimulálni.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth,height=240px]{images/renderelt_novenyzet.jpg}
+    \caption{Különféle méretű, csoportosan megjelenő növényeket tartalmazó render egy generált vegetációról}
+\end{figure}
+
 \newpage
 \section{Szoftver dokumentáció}
 
@@ -87,12 +93,16 @@ A programon belül az egér mozgatásával lehet a kurzor pozícióját megvált
 A "Generate" feliratú gombra rákattintva az aktor képes egy új ablakot előhívni, amelynél procedurális generáláskor alkalmazott bemeneti paramétereket lehet megadni.
 Az ablak bal oldalán a különböző paramétereket szabályzó bemeneti mezők találhatóak, míg az ablak jobb oldalán az egyes megadott argumentumok helyességéről és tartalmáról ad információt a program.
 
-\todo{USECASE}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth,height=240px]{diagrams/renders/GenerationInputUseCaseDiagram.jpg}
+    \caption{Generálás paraméterei megadásának eset diagramja}
+\end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth,height=240px]{images/generalas_ablak.jpg}
-    \caption{Újabb övényzet generálását szabályzására alkalmas felnyiló ablak.}
+    \caption{Újabb növényzet generálásának kezdeményezésére felnyiló ablak.}
     \label{fig:generalas_ablak}
 \end{figure}
 
