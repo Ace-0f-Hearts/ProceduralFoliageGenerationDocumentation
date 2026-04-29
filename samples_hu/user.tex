@@ -70,6 +70,7 @@ Az előre összecsomagolt bináris állományok segítségével a szoftver rendk
 
 Az applikáció futtatásakor az \todo{illusztrációra utalás} \ref{fig:kezdokepernyo} ábrán látható egyszerű kezelőfelületet és három dimenziós környezetet tartalmazó ablak fogadja a felhasználót.
 A szoftver kezdeti kezelőfelülete az ablak felső szegélyét végig követő menügombokból áll, amelyek segítségével a felhasználó képes új növényzet generálását kezdeményezni, egy tetszőleges meglévő növényzet konfigurációt betölteni, vagy a program beállításait kezelni.
+A programon belül az egér mozgatásával lehet a kurzor pozícióját megváltoztatni, illetve a bal egér gomb megnyomásával tud a szoftvert kezelő személy a felhasználói felület egyes részeivel interakcióba lépni.
 
 \begin{figure}[H]
     \centering
@@ -92,10 +93,32 @@ Az ablak bal oldalán a különböző paraméterek mező találhatóak, míg az 
     \label{fig:generalas_ablak}
 \end{figure}
 
-A "Load" felirattal ellátott gombra kattintva egy újabb ablak jelenik meg, amely ahol egy korábban elkészített konfigurációs fájlhoz vezető elérésiútvonalat tud megadni a felhasználó. Ez által képes egy régebbi generálás eredményét újra betölteni és megtekinteni a programban.
+A "Load" felirattal ellátott gombra kattintva egy újabb ablak jelenik meg, ahol egy korábban elkészített konfigurációs fájlhoz vezető elérésiútvonalat tud megadni a felhasználó. Ennek megadásával képes a program egy korábbi növényzet generálás eredményét betölteni és megjeleníteni.
 
-A növényzet betöltésének befejeztével a felhasználó előtt megjelenik a számítások alatt használt domborzat térkép, illetve a generált növényzet. Érdemes megjegyezni, hogy a növényeknél használt testhálók nem reprezentatívak a növények tényleges faját illetően. Ennek teljesítménybeli, illetve korlátozott erőforrásbeli okai vannak.
- \todo{Ezt talán inkább az impl. részbe kéne} 
+A növényzet betöltésének befejeztével a felhasználó előtt megjelenik a számítások alatt használt domborzat térkép, illetve a generált növényzet. A domborzat és növényzet egyszerűbb interpretálásához a generálás folyamán készített textúrával együtt jeleníti meg a program a domborzatot. Ennek segítségével egyszerűbben képes a felhasználó a növényzet irányultságát és szerkezetét megvizsgálni. 
+Az elkészített és megjelenített textúrák különböző színeket használnak az egyes objektumok által lefedett terület csoportok jelzéséhez, jelentésük a \ref{tab:szinek_jelentese} táblázatban van részletezve. Fontos, hogy a domborzaton való sötétebb árnyalatok általában átfedéssel rendelkező terület darabokat jelölnek.
+
+Érdemes megjegyezni, hogy az egyes növények renderelésénél használt testhálók nem reprezentatívak a növények tényleges faját illetően. Ennek elsősorban teljesítménybeli, illetve korlátozott erőforrásbeli okai vannak.
+
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{| m{0.12\textwidth} | m{0.65\textwidth} |}
+        \hline
+        \textbf{Szín} & \textbf{Jelentés} \\
+        \hline
+        \hline
+        \emph{Kék} & Növények terjedését gátló terület \\
+        \hline
+        \emph{Rózsaszín} & Növények terjedését gátló útszerű objektum \\
+        \hline
+        \emph{Sárga} & Expliciten megadott, növényeket területén belül megengedő objektum\\
+        \hline
+    \end{tabular}
+
+    \caption{Térkép textúrákon található színek jelölése}
+    \label{tab:szinek_jelentese}
+\end{table}
 
 
 \begin{figure}[H]
@@ -117,9 +140,8 @@ Továbbá az "Options" nevezetű legördülő menüsegítségével képes a felh
     \label{fig:beallitasok_ablak}
 \end{figure}
 
-A szoftverben egy három dimenzióban mozgatható kamera segítségével tudjuk a betöltött domborzatot és rajta elterülő növényzetet megtekinteni.
-A felhasználó a számára elérhető kezelő felülettel bal egérgombbal való kattintással tud interakcióba lépni.
-Ezenkívül felhasználói felület egyszerűbb használatának érdekében ezt a fajta mozgást csakis a jobb egérgomb lenyomva tartásával tudjuk végezni a WASD billentyű kombináció segítségével. Továbbá a kamera magasságát a "Shift" és "Space" billenyűk segítségével tudjuk csökkenteni, illetve növelni.
+A szoftverben egy három dimenzióban mozgatható kamera segítségével lehet a betöltött domborzatot és rajta elterülő növényzetet megtekinteni.
+A felhasználói felület egyszerűbb használatának érdekében a kamera szögét csakis a jobb egérgomb lenyomva tartásával tudja a felhasználó elvégezni az egér mozgatásának segítségével. Továbbá a kamera magasságát a "Shift" és "Space" billenyűk segítségével tudjuk csökkenteni és növelni, illetve a "WASD" billentyű kombinációkkal lehet a kamerát mozgatni előre, hátra és jobb, illetve bal oldalra. 
 
 \begin{figure}[H]
     \centering
