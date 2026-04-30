@@ -367,20 +367,22 @@ Mint előzőleg részletezve lett, a program az objektumokkal való metszésvizs
 Ennek orvoslására lehet nagyobb felbontású maszkoló textúrát alkalmazni, amellyel így több részlet tud a program lefedni a raszterizálás során. Jelenleg ezt a megoldást alkalmazza a szoftver is és így egy, a térkép méreteknél négyszeres nagyságú maszkoló textúrával végzi el a maszkolási műveleteket. Ezáltal kevesebb hamis pozitív érték születhet az egyes vizsgálatoknál.\newline
 Világos azonban, hogy ez egyben egy memória igényes megoldás is. Ezért a témakör kidolgozásakor eleinte ún. térbeli indexelési módszerek voltak megvizsgálva. Ezeknek a módszereknek a lényege az, hogy a rendelkezésre álló teret és az abban megtalálható objektumokat és/vagy pontokat valamilyen fa struktúrában írják le, amelyek gyors és hatékonyan keresési, felépítési és/vagy beszúrási műveleteket támogatnak. Mivel esetetünkben komplexebb két dimenziós objektumokról van szó amelyek poligononként vannak ábrázolva, így a \cite{10.1145/602259.602266} cikkben összefoglalt, úgy nevezett R-fák használata eleinte megfontolásra került. Az R-fák olyan N-dimenziós fák, amelyek expliciten több pontból álló objektumok tárolására és gyors indexelésére lettek tervezve. Két dimenziós esetben alkalamazva ezek a fák minden egyes tárolt objektumra meghatároznak egy minimális méretű befoglaló négyzetet, illetve minden csomópontjukat is hasonló módon ilyen befoglaló négyzetként kezelik. Így hatékonyan képesek egy tetszőleges pontról megállapítani, hogy bármilyen objektumon belül található-e meg.\newline
 Végül az ok amiért ezen adatstruktúrák nem lettek alkalmazva a programban az volt, hogy nem volt egyértelmű hogy mennyire illene ezen adatszerkezet a problémakörhöz. Egyrészt, mivel egy tájfutótérkép rengeteg objektumot is tárolhat egyszerre amelyek átfedésben lehetnek, ezért további kutatás szükséges arról, hogy mennyire jól kezelik valójában ezek az adatstruktúrák az átfedéseket. Továbbá a tájfutótérkép formátumok implementációjának végeképp semmi sem akadályozza meg azt, hogy egész térképeket lefedő objektumok legyenek eltárolva. Ennél megint csak kérdéses, hogy ezen esetek mennyire nehezítik meg az indexeléseket, illetve nem-e tudják elrontani az adatstruktúra minőségét.
-
+\pagebreak
 \subsection{Hibásan formázott térképek kezelése}
+
+A téma feltárásakor egy másik, a tájfutótérképek minőségével kapcsolatos gond is felmerült, amely az eleinte megadott magok mennyiségét, illetve a lefedett terület nagyságát korlátozta. Mivel alapvetően ezek a orientációs térképek valóvilágbeli versenyekben alkalmazott segédeszközök, így azzal a céllal vannak elkészítve, hogy vizuális segédletet nyújtson egyrészt a versenyzők, másrészt a szervezők számára papír formában. Ez azt is jelenti, hogy a legtöbb térkép mindenekelőtt nyomtatáshoz van megtervezve, azaz alapból egy fehér alapon megjelenő formátumban lesz kezelve. Vélhetően a nyomtatás folyamatának egyszerűsítése miatt, illetve az egyes térképek összeállításának meggyorsításának érdekében, több olyan tájfutótérkép fájllal is előkerült a szakdolgozat kidolgozása során, amelyek nem használták az ISOM 2017-es sztenderhez tartozó, fehér színt használó "405 Forest" jelölést. Helyette a papír, illetve a szerkesztő program hátterének színe jelezte ezekben az esetekben a nagyobb erdős részeket.\newline
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth,height=300px]{images/eredeti_terkep.jpg}
+    \includegraphics[width=0.8\textwidth]{images/eredeti_terkep.jpg}
     \caption{Eredeti térkép hiányos erdő jelölésekkel}
 \end{figure}
-A téma feltárásakor egy másik, a tájfutótérképek minőségével kapcsolatos gond is felmerült, amely az eleinte megadott magok mennyiségét, illetve a lefedett terület nagyságát korlátozta. Mivel alapvetően ezek a orientációs térképek valóvilágbeli versenyekben alkalmazott segédeszközök, így azzal a céllal vannak elkészítve, hogy vizuális segédletet nyújtson egyrészt a versenyzők, másrészt a szervezők számára papír formában. Ez azt is jelenti, hogy a legtöbb térkép mindenekelőtt nyomtatáshoz van megtervezve, azaz alapból egy fehér alapon megjelenő formátumban lesz kezelve. Vélhetően a nyomtatás folyamatának egyszerűsítése miatt, illetve az egyes térképek összeállításának meggyorsításának érdekében, több olyan tájfutótérkép fájllal is előkerült a szakdolgozat kidolgozása során, amelyek nem használták az ISOM 2017-es sztenderhez tartozó, fehér színt használó "405 Forest" jelölést. Helyette a papír, illetve a szerkesztő program hátterének színe jelezte ezekben az esetekben a nagyobb erdős részeket.\newline
 Ezek az esetek így felhívták a figyelmet egy olyan szituációra, ahol a térkép jelentős része a fájl beolvasásának szempontjából üres, azonban mint vizuális médium ugyanúgy tartalmazhat információt a felhasználójának számára. Ennek tudatában kettő opció lett megvizsgálva. Egyrészt természetesen adódna az, hogy csakis az expliciten megadott objektumokkal dolgozzon tovább a program, hiszen hivatalos sztenderedek alapján igenis használni kellene a megadott jelöléseket, beleértve az előbbiekben felsoroltak is. Ez azonban továbbra is kevésbé optimális vegetációt eredményezett volna sok esetben. Így különböző megoldások lettek fontolóra véve, amellyel egy térkép burkát lehetne expliciten megadott pontjaiból megállapítani, majd a belső részét elkülöníteni a térképhez nem hozzátartozó részektől.\newline
 További kutatás során végül az ún. "alpha shapes", azaz alfa alakzatok topológiai eszközt alkalmazó, konkáv burok\cite{alphaShapesArticle} meghatározó módszer alkalmazása mellett lett döntve. Egy alfa alakzatok esetünkben két dimenzióban leírt pontok alakját hivatottak meghatározni egy tetszőleges alfa érték segítségével. Lényege, hogy egy pont felhő esetén az alfa alakzat éleket feszít azon pontok közé, amelyekből a konstruált alfa sugarú körök közös pontokkal rendelkeznek.
 
+
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.8\textwidth,height=300px]{images/alpha_shape.jpg}
+  \includegraphics[width=0.7\textwidth]{images/alpha_shape.jpg}
   \caption{Egy térkép köré rajzolt körvonal "alpha shape" segítségével. A kék pontok a térkép objektumok pontjait jelölik, míg a piros vonal megtalált alakzat határoló vonalát ábrázolja.}
 \end{figure}
 
@@ -392,17 +394,17 @@ Ennek megoldására lett alkalmazva végül a CGAL könyvtárcsomagban megtalál
   \centering
 
   \subcaptionbox{Generált növényzet "alpha shape" alkalmazása nélkül}{
-    \includegraphics[width=0.45\textwidth,height=200px]{images/alphashapesnelkul.jpeg}
+    \includegraphics[width=0.45\textwidth]{images/alphashapesnelkul.jpeg}
   }
   \hspace{5pt}
   \subcaptionbox{Generált növényzet "alpha shape" alkalmazásával}{
-    \includegraphics[width=0.45\textwidth,height=200px]{images/alphashapesalkalmaz.jpeg}
+    \includegraphics[width=0.45\textwidth]{images/alphashapesalkalmaz.jpeg}
   }
-  \caption{Generált növényzetben való különbség "alpha-shape"-ek alkalmazásával és anélkül}
+  \caption{Generált növényzetben való különbség "alpha-shape"-ek alkalmazásával és anélkül. A pontok az egyes növény egyedeket jelölik.}
 \end{figure}
 
 
-\section{Egyedek fajhoz való besorolása}
+\section{Növény fajok megállítása}
 
 Miután a növényzetet alkotó egyedeket meghatározta a program, a bemeneti argumentumként megadott fajokhoz való besorolást végzi el minden egyedre a következő lépésben.
 Ez egy kétlépcsős folyamat, ahol elsőlépésben egy kezdeti halmazra határozza meg a program külső, ún. abiotikus befolyásoló tényezők alapján az egyes egyedek faját. Ezek után pedig szomszédsági döntéshozatal segítségével állapítja meg a maradék növények faját.
@@ -484,34 +486,92 @@ A természetben is általában az ugyanazon fajokhoz tartozó egyedek esélyeseb
 A folyamat megvalósítására végül a 3-nn algoritmus, másnéven 3-legközelebbi szomszéd algoritmus van alkalmazva \cite{kNN1053964}. Az módszer esetünkben a következő takarja: A program minden egyes megmaradt pontra megvizsgálja, hogy a kezdeti halmazból mely három egyed  esik a legközelebb hozzá. A legközelebbi egyedek megtalálása után elérhető a program számára, hogy fajonként hány egyed található a legközelebb az adott ponthoz. Végül azon faj azonosítója lesz az éppen vizsgált egyedhez hozzá rendelve, amelynek egyedeiből a legtöbb lett megtalálva a 3-nn algoritmus során. Itt érdemes megjegyezni, hogy az algoritmust tetszőleges $k \in \mathbb{N}$ darab szomszéd keresésével is lehetne alkalmazni, a $k = 3$ csupán előző kutató munkákban ajánlott választás a problémakört tekintve.
 \newline
 
-A generálás sebességének érdekében fontos megfontolás volt többek között az előző lépés optimalizálása. Mivel gyakran több ezer, akár több tíz ezer növényt is allokálhat a program, ezért egy tetszőleges növény $k \in \mathbb{N}$ darab szomszédjának megtalálása nem triviális feladat. A naiv megoldás $\N \in \mathbb{N}$ növény esetén $\O(n^2)$ aszimptotikus futási idővel rendelkezne, amely így a súlyosan megnövelné a program futási idejét.
+A generálás sebességének érdekében fontos megfontolás volt többek között az előző lépés optimalizálása. Mivel gyakran több ezer, akár több tíz ezer növényt is allokálhat a program, ezért egy tetszőleges növény $k \in \mathbb{N}$ darab szomszédjának megtalálása nem triviális feladat. A naiv megoldás $N \in \mathbb{N}$ növény esetén $\mathcal{O}(n^2)$ aszimptotikus futási idővel rendelkezne, amely így a súlyosan megnövelné a program futási idejét.
 Ennek megoldására léteznek különböző térbeli indexelési módszerek pontokra. A témakör kidolgozásakor két ilyen módszer is meg lett vizsgálva, amelyik közül végül csak egy maradt meg a program végleges változatában.
 Az első ilyen módszer ún. Quad-fák segítségével kívánta lecsökkenteni a távolság vizsgálatok mennyiségét\cite{Finkel1974}. Többszöri tesztelés folyamán azonban a módszer nem bizonyult sikeresnek, ugyanis a pontok mennyisége, sűrűsége és nagy területen való elterülése túlságosan mély fákat eredményezett, amelyek korlátozták annak teljesítményét és használhatóságát.
-A második módszer, amely végül sikeresnek is bizonyult, kd-fák alkalmazásával oldotta meg a problémát\cite{Bentley}. Ezen fák ugyanis láthatóan sokkal jobban illeszkedenek a problémakörben található ponthalmazokhoz. Továbbá ezen algoritmus ugyanúgy empirikusan meghatározott $\O(log n)$ átlagos futási időt biztosít egy ponthoz legközelebbi szomszédok keresésekor.     
+A második módszer, amely végül sikeresnek is bizonyult, kd-fák alkalmazásával oldotta meg a problémát\cite{Bentley}. Ezen fák ugyanis láthatóan sokkal jobban illeszkedenek a problémakörben található ponthalmazokhoz. Továbbá ezen algoritmus ugyanúgy empirikusan meghatározott $\mathcal{O} (log\ n)$ átlagos futási időt biztosít egy ponthoz legközelebbi szomszédok keresésekor.     
 Az ebben a lépésben alkalmazott kd-fákat a Nanoflann C++ könyvtár segítségvel építi fel a szoftver, amely így hatékonyan tudja elvégezni a fentebb leírt komplex algoritmusokat.
 
-
-\todo{AlgLib könyvtár használata + Nanoflann (KD fa felépítése szomszédok megtalálására)}
-Részgráfokra bontás -> Mely növények vannak közel egymáshoz, ezek tudják egymást "méretét" korlátozni
-
-Részgráfok felépítése, majd egymás közötti relációk felépítése AlgLib számára
 
 \section{Vegetáció területének maximalizálása}
 
 
-Miután megvan az összes egyed pozíciója illetve faji azonosítója, már csak az egyet méretének kiszámolása maradt mint a program feladata.
-Ezt mint egy nem-lineáris optimalizációs feladat van megfogalmazva a \cite{Gasch2022} cikkben, miszerint a vegetáció által lefedett terület maximalizálása lesz az alkalmazott módszer elsődleges célja.   
+Miután a program meghatározta az összes egyed pozícióját és faját, csakis az egyedek méretének számítása marad hátra a futtasás során. 
+Ezt mint egy nem-lineáris optimalizációs feladat van megfogalmazva a \cite{Gasch2022} cikkben, miszerint a vegetáció által lefedett terület maximalizálása lesz az alkalmazott módszer elsődleges célja. Ennek motivációs indoka a növényvilágban fellelhető nyersanyagok és erőforrások után való versengés modellezése. 
+A növények méretét a koordintájuk körül leírt körrel approximáljuk, és ezek alapján, illetve minimális és maximális méretüket ismerve, egy egyenlőtlenség rendszert állítunk fel az egyes növénycsoportokra.
 
-Optimalizáció elvégzése
+\begin{figure}[H]
+  \centering
+  \includegraphics[width = 0.45\textwidth]{diagrams/renders/EgyenlotlensegRendszerek.jpg}
+  \caption{Egyenlőtlenség rendszer példa}
+  \label{fig:egyen}
+\end{figure}
 
-Minimum nagyságot nem elérő növények eltávolítása
+A következő példával van bemutatva egy egyszerűsített eset.
+Legyen $\{A,B,C,D,E\}$ mind egy-egy növény egyed középpontja, azoknak előre megadott lehetséges minimális és maximális méretekkel. A maximális méreteket jelöljük $0 < r,s,t,u,v \in \mathbb{R}$ jelöléssel, illetve vegyük a \ref{fig:egyen} ábrán található esetet, ahol is öt különálló növényegyedet láthatunk, jelölve mindegyik faját és maximális méretével köréírt kör sugarát.
+A maximális és minimális méretek az alábbi lineáris megkötéseket szabják így számunkra:
+\begin{align}
+  0 <= a <= r \\
+  0 <= b <= s \\
+  0 <= c <= t \\
+  0 <= d <= u \\
+  0 <= e <= v \\
+\end{align}
+ ahol $a,b,c,d,e \in \mathbb{R}$ a növények méretei. 
+Továbbá világos, hogy mivel azt az invariánst, miszerint két növény együttes mérete nem haladhatja meg a közöttük lévő távolságot a kódnak be kell tartania, ezért a következő lineáris megkötéseket kell a programnak figyelembe tartania:
+\begin{align}
+	x_3 > e + d \\
+  x_2 > c + a \\
+  x_1 > b + a\\
+\end{align}
 
-Folyamat megismétlése hogy a méreteket stabilizáljuk
-Megfontonlandó dolgok:
+Ezt az egyenlőtlenség rendszert felhasználva próbáljuk végül a
 
-Az eredmények pontossága -> Meg lehet figyelni, hogy egyes lineáris megkötések, amelyek a növények közötti távolságon alapulnak, nem fognak teljesülni, olyan 0.00001-es nagyságrendűleg pontatlanság figyelhető meg
+\begin{align}
+	\pi * (a^2 + b^2 + c^2 + d^2 + e^2) = T
+\end{align}
+kifejezést maximalizálni a továbbiakban. 
+Ennek egyszerűsítésére azonban tudjuk azt ez elgondolást alkalmazni, hogy valójában a $A,B,C$ és $D,E$ pontok egymás növekedését soha nem tudják befolyásolni az egymsától való távolságok kapcsán. Így valóbjában elég külön-külön maximalizálni az alábbi kifejezést:
+\begin{align}
+  \pi * (a^2 + b^2 + c^2) = T_1 \\
+  \pi * (d^2 + e^2) = T_2
+\end{align}
 
-Okok: Optimalizációs folyamat megállási paraméterein kell fejleszteni -> Milyen paraméterek lennének esetünkben megfelelőek
+Ezt az elgondolást a program is alkalmazza: Egy-egy optimalizációs lépést csakis az egyedek egy részhalmazára végez el, amelynek tagjait az egyedek egymáshoz való távolsága szerint szabályozza. Így valójában részgráfokat képez futtatás közben, amelynek egyedi között abban az esetben található él, amikor azok távolsága kisebb mint a kettő maximum méretének összege.
+
+Fontos egyúttal, hogy habár a növények minimális mérete nem feltétlen egyenlő a nullával, az alkalmazásból kifolyólag előnyben részesítjük a nagyobb egyedeket a kisebbekkel szemben. Így érdemes megengedni, hogy az egyes egyedek méretei a minimális méretük alá csökkenjen, annak érdekében, hogy később ezeket kitöröljük a vegetációból és esélyt adjunk a nagyobb egyedek megjelenésére.
+
+A program ezen maximalizációt az AlgLib nevű, numerikus algoritmusok implementációjáért felelős C++ könyvtár segítségével végzi. A könyvtárral kapcsolatos észrevétel volt, hogy használata további finomításokat igényel, szükséges lenne a feladatkörhöz igazítani a paramétereit, ugyanis némi pontatlanság figyelhető meg a lineáris megkötések betartása kapcsán. Ezek azonban semmiféleképp nem olyan megoldhatatlanok vagy zavaróak a jelenlegi alkalmazását tekintve. 
+
+
+% \begin{algorithm}[H]
+% \caption{A general interval B\&B algorithm}
+% \label{alg:ibb}
+% \textbf{\underline{Funct}} IBB($S,f$)
+% \begin{algorithmic}[1] % sorszámok megjelenítése minden n. sor előtt, most n = 1
+% \State Legyen $N$ a növényeink halmaza,
+% \While{\exists $n \in N$ növény, amelynek mérete nem lett még kiszámítva}
+%   \State Legyen a $\{m \in N | max_n + max_m > d_{n,m} \} = M$, ahol $d_{n,m}$ az $n$ és $m$ közötti távolság, továbbá $max_m$ az $m$ növény maximum mérete. 
+
+%   \State Határozzuk meg az egyenlőtlenség rendszer lineáris megkötéseket minden $m \in M$ esetén
+% 	\State Select an interval $X$ from ${\cal L}_W$ \label{step:selrule}\Comment{Selection rule}
+% 	\State Compute $lbf(X)$ \Comment{Bounding rule}
+% 	\If{$X$ cannot be eliminated} \Comment{Elimination rule}
+% 		\State Divide $X$ into $X^j,\ j=1,\dots, p$, subintervals   \Comment{Division rule}
+% 		\For{$j=1,\ldots,p$}
+% 			\If{$X^j$ satisfies the termination criterion} \Comment{Termination rule}
+% 				\State Store $X^j$ in ${\cal L}_W$
+% 			\Else
+% 				\State Store $X^j$ in ${\cal L}_W$
+% 			\EndIf
+% 		\EndFor
+% 	\EndIf
+% \EndWhile
+% \State \textbf{return} ${\cal L}_Q$
+% \end{algorithmic}
+% \end{algorithm}
+
+
 
 \todo{}
 
