@@ -61,7 +61,20 @@ Fontos, hogy mind a minimum és maximum területi igények\todo{Erre lehet kéne
 \todo{Példa JSON magyarázattal}
 \begin{minted}{json}
 [
-  
+    {
+    "id": 1, // Azonosító szám
+    "name": "acacia", // Faj megnevezése
+    "growth_radius": [2,3], // A faj minimum és maximum méretei
+    "elevation": [40,30,20], // A faj egyedeinek domborzat magasságától függő előfordulás normál eloszlása 
+    "slope": [25,6,5] // A faj egyedeinek domborzat meredekségétől függő előfordulás normál eloszlása
+  },  
+  {
+    "id": 2,
+    "name": "birch",
+    "growth_radius": [3,5],
+    "elevation": [200,120,110],
+    "slope": [26,16,5]
+  },
 ]
 \end{minted}
 
@@ -117,32 +130,132 @@ A növényzet program mint opcionális paraméter várhat egy ún. magasság té
 
 Annak érdekében, hogy a generált növényzet faji diverzitása nagyobb mértékű legyen egy-egy régión belül, \cite{Gasch2022} kutatói papírban ún. diffúziós pontok használat javasolják. Ezek a pontok esetünkben olyan véges sugarú köröket jelölnek, amelyek valamilyen, a vegetációban előforduló növényfaj terjedését segítik elő mesterséges módon a területükön belül. Esetünkben ezeket a pontok véletlenszerűen állítjuk elő a térkép úgy, hogy azok a térkép dimenzión belül maradjanak. A felhasználónak csakis a diffúziós pontok mennyiségén van befolyása, azonban amennyiben a témakör megkívánja, egyszerűen megoldható lenne a pontok manuális megadása is. 
 
-\subsection{Egyéb opcionális argumentumok}
+\todo{Flag megadása - milyen flaggel adjuk meg}
+\subsection{Argumentumok formázása}
 
-\todo{}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{| m{0.20\textwidth} | m{0.24\textwidth} |  m{0.55\textwidth}  |}
+        \hline
+        \textbf{Argumentum név} & \textbf{Argumentum értéke} & \textbf{Leírás} \\
+        \hline
+        \hline
+        \emph{--help vagy -h} & NA  & Szoftver használatáról való rövid ismertetőt ad, majd a program.\\
+        \hline
+        \emph{--height\_map} & .jpeg, .jpg, vagy .png fájl elérési útvonal & A domborzatot leíró magasság térkép. \\
+        \hline
+        \emph{--ocad} & .ocd vagy .omap fájl elérési útvonal & OCAD vagy OMAP formátumú tájfutótérkép. \\
+        \hline
+        \emph{--species} & JSON fájl elérési útvonal & A növényzetet felépítő fajok leíró listája. \\
+        \hline
+        \emph{--random\_diff} & Egész szám &  Alkalmazott diffúziós pontok száma.\\
+        \hline
+        \emph{--symbol} & JSON fájl elérési útvonala & Szimbólum klassifikációs lista.\\
+        \hline
+        \emph{--write\_map\_data} & JSON fájl elérési útvonala & A feldolgozott tájfutótérkép mentési útvonalát szabja meg.\\
+        \hline
+        \emph{--out} & JSON fájl elérési útvonal & A növényzet egyedeinek listájának mentési útvonalát szabja meg.\\
+        \hline
+        \emph{--config} & JSON fájl elérési útvonal & A növényzet megjelenítéséhez szükséges konfigurációs fájl mentési útvonalát szabja meg.\\
+        \hline
+        \emph{--foliage\_img} & .jpeg, .jpg vagy .png fájl élérési útvonal & Expliciten megadott, növényeket területén belül megengedő objektum.\\
+        \hline
+    \end{tabular}
+
+    \caption{Térkép textúrákon található színek jelölése}
+    \label{tab:generator_argumentumok}
+\end{table}
+
+
+\section{Növényzet generálás kimeneti értékei}
+
+\subsection{Növényzet egyedeinek listája}
+
+A vegetáció egyedeinek listáját a generáló szoftver készíti el és tárolja egy JSON formátumú fájlban, amely átláthatósága miatt egyszerűen kezelhető és ellenőrizhető a felhasználó és fejlesztők által. A generálás befejeztével a növényzet megjelenítő szoftver réteg veszi át ezen tartalmát, és tölti be az egyes egyedeket renderelés céljával.
+
+\subsection{Térképet leíró adatok}
+
+Opcionálisan megoldható
+
+\subsection{Konfigurációs fájl}
+
+\begin{minted}{json}
+[
+	{
+		"id" : 3, // Egyed fajának azonosító száma
+		"scale" : 0.6018071174621582, // Egyed számított
+		"x" : 723.548583984375, // Egyed X koordinátája
+		"y" : 535.79974365234375 // Egyed Y koordinátája
+	},
+	{
+		"id" : 2,
+		"scale" : 5.0,
+		"x" : 741.1915283203125,
+		"y" : 531.5
+	},
+	{
+		"id" : 4,
+		"scale" : 2.4416394233703613,
+		"x" : 749.846923828125,
+		"y" : 541.836181640625
+	}
+]
+\end{minted}
 
 \section{Térképek beolvasása}
-\todo{Kód arról, hogy hogyan szerezzük meg az objektumokat és szimbólumokat}
+\todo{Kód arról, hogy hogyan szerezzük meg az objektumokat és szimbólumokat VÉGSŐ ESET}
 
 Az korábban részletezett orientációs térképek formátumokból három fajta információt használ a program a generálás elvégzéséhez:
 \begin{itemize}
   \itemsep1em
-  \item Objektumok: Az objektumok reprezentálják a térkép által bemutatott területen elhelyezkedő struktúrákat, jelzik azok pozícióját, méretét illetve formáját. Az egyes lépéseknél alkalmazott metszés vizsgálatok ezeknek az objektumokkal hajtódnak végre. Továbbá szerepet játszanak a térkép egész területének elkülönítéséhez, amely a nem jól formázott tájfutótérképek  esetén szükséges. Mindemellett három fajta objektum típust különböztetünk meg, amelyeknek fajtája szerepet játszik a velük végzett műveletek során.
-  \item Pontszerű objektumok: Egyetlen egy pontból álló objektumok
-  \item Területet jelző objektumok: Zárt utakból álló objektum, amely által bezárt rész az objektum részét alkotja.
-  \item Utakat jelző objektumok: Zárt vagy nyílt utakból álló tereptárgy, amely által esetlegesen bezárt részt nem képzi részét az objektumnak.
+  \item \textbf{Objektumok}: Az objektumok reprezentálják a térkép által bemutatott területen elhelyezkedő struktúrákat, jelzik azok pozícióját, méretét illetve formáját. Az egyes lépéseknél alkalmazott metszés vizsgálatok ezeknek az objektumokkal hajtódnak végre. Továbbá szerepet játszanak a térkép egész területének elkülönítéséhez, amely a nem jól formázott tájfutótérképek  esetén szükséges. Mindemellett három fajta objektum típust különböztetünk meg, amelyeknek fajtája szerepet játszik a velük végzett műveletek során.
+  \begin{itemize}
+    \item \textbf{Pontszerű objektumok}: Egyetlen egy pontból álló objektumok.
+    \item \textbf{Területet jelző objektumok}: Zárt utakból álló objektum, amely által bezárt rész az objektum részét alkotja.
+    \item \textbf{Utakat jelző objektumok}: Zárt vagy nyílt utakból álló tereptárgy, amely által esetlegesen bezárt részt nem képzi részét az objektumnak. 
+  \end{itemize}
 
-\todo{Osztály diagram Base + Child}
+\end{itemize}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth,height=200px]{diagrams/renders/ObjectClassDiagram.jpg}
+  \caption{Az objektumok a tárolt típusuk alapján választják meg milyen módon végeznek metszés vizsgálatot egy adott ponttal}
+\end{figure}
+  
 
-  \item Szimbólumok: A szimbólumok a velük asszociált objektumok vizuális komponenseit foglalják össze. Programunk ezek azonosító számának segítségével kategorizálja az egyes területek befolyását a generálás eredményére. Ezenkívül a szimbólumok vizsgálatával tudja a program a növényzet szimulálás lépéseinél irreleváns objektumokat kiszűrni. Az objektumokhoz hasonlóan itt is három fajta szimbólum típus különböztetünk meg a témakörhöz relevánsan.
+\begin{itemize}
+
+  \item \textbf{Szimbólumok}: A szimbólumok a velük asszociált objektumok vizuális komponenseit foglalják össze. Programunk ezek azonosító számának segítségével kategorizálja az egyes területek befolyását a generálás eredményére. Ezenkívül a szimbólumok vizsgálatával tudja a program a növényzet szimulálás lépéseinél irreleváns objektumokat kiszűrni. Az objektumokhoz hasonlóan itt is három fajta szimbólum típus különböztetünk meg a témakörhöz relevánsan.
 \todo{Osztály diagram Base + Child}
-  \item Georeferencia értékek: Többek között a térkép által leírt terület skálázásához, illetve projektív és térkép koordináták közötti konverziókhoz szükséges értékeket fogalja önmagába. Ezek az értékek elsősorban az objektumok koordinátáinak kinyerésénél szükségesek annak érdekében, hogy a valós méretarányokhoz közelebbi eredményeket érjünk el a vegetáció elkészítésekor. 
-\todo{Kódsor a konverzió leírására} 
+  \item \textbf{Georeferencia értékek}: Többek között a térkép által leírt terület skálázásához, illetve projektív és térkép koordináták közötti konverziókhoz szükséges értékeket fogalja önmagába. Ezek az értékek elsősorban az objektumok koordinátáinak kinyerésénél szükségesek annak érdekében, hogy a valós méretarányokhoz közelebbi eredményeket érjünk el a vegetáció elkészítésekor. 
+
+  \todo{Kódsor a konverzió leírására} 
 \end{itemize}
 
-A különböző utakból álló objektumok ún. poli-szakaszokkal vannak megvalósítva. A poli-szakaszok olyan utak, amelyek egyenes szakaszok segítségével vannak összeillesztve. Az eredeti tájfutótérkép formátumokban használt objektumok azonban egyenes szakaszokból, illetve Bézier görbékből is állhatnak, amelyek pontjai speciális módon vannak megadva. A generálás egyes lépéseiben végzett későbbi metszés vizsgálatok, illetve objektumokat befoglaló négyzetek számításának érdekében így szükséges ezen Bézier görbéket további poli-szakaszokkal közelíteni. Ez természetesen valamennyi pontatlansághoz vezethet a komplexebb görbék esetén, viszont a generált növényzetre továbbra is elhanyagolható hatással bír.
 
-\todo{Konverzióról source kód, és citing as code taken from somewhere else}
+\pagebreak
+\begin{minted}[fontsize=\footnotesize]{cpp}
+
+    //A kód az a következő nyílt forráskódú kódbázis alapján lett értelmezve és átemelve a jelenlegi formájába:
+    //https://github.com/OpenOrienteering/mapper/blob/162b78212196c3fed97946608e463bf2ffaaf761/src/core/georeferencing.cpp#L1037
+
+
+    // A georeferencia értékek alkalmazásával egy térkép és projektív koordináta közötti transzformációt konstruál a program.
+void Georeferencing::UpdateTransformation()
+{
+    glm::mat4 transform(1.f);
+    float scaling = combined_scale_factor_ * scale_denominator_ / 1000.0;
+
+    transform = glm::translate(transform,glm::vec3(projected_ref_points_[0], projected_ref_points_[1],0.f));
+    transform = glm::rotate(transform,-grivation_, glm::vec3(0.f,0.f,1.f));
+    transform = glm::scale(transform,glm::vec3(scaling, -scaling,1.f));
+    transform = glm::translate(transform,glm::vec3(-map_ref_points_[0], -map_ref_points_[1],0.f));
+
+    to_projected_ = transform;
+}
+\end{minted}
+
+A különböző utakból álló objektumok ún. poli-szakaszokkal vannak megvalósítva. A poli-szakaszok olyan utak, amelyek egyenes szakaszok segítségével vannak összeillesztve. Az eredeti tájfutótérkép formátumokban használt objektumok azonban egyenes szakaszokból, illetve Bézier görbékből is állhatnak, amelyek pontjai speciális módon vannak megadva. A generálás egyes lépéseiben végzett későbbi metszés vizsgálatok, illetve objektumokat befoglaló négyzetek számításának érdekében így szükséges ezen Bézier görbéket további poli-szakaszokkal közelíteni. Ez természetesen valamennyi pontatlansághoz vezethet a komplexebb görbék esetén, viszont a generált növényzetre továbbra is elhanyagolható hatással bír.
 
 \section{Egyedek koordinátáinak meghatározása}
 
@@ -150,69 +263,204 @@ A vegetáció egyedeinek allokálása azok pozíciójának meghatározásával k
 A továbbiakban a növények lehetséges pozíciójára "magként" fogok utalni. Ezek a magon olyan koordinátákat jelölnek tehát, amelyekről még nem tudja a program biztosan eldönteni, hogy valóban allokálhat-e a pozícióra bármilyen növény egyedet.
 Továbbá az egyszerűség kedvéért azon "erdőkként" fogok azon területekre utalni, amelyekre növények terjedhetnek, illetve "tisztásként" olyan területekre, ahova a vegetáció egyedei nem tudnak terjedni.\todo{átfogalmazás} 
 
+
+
+
 \subsection{Expliciten megadott területek esetén}
 
-Az orientációs térképek feldolgozása utána a program számára elérhetőek azon objektumok, amelyekről korábban el lett döntve, hogy engedik-e a különböző növények elterjedését a területükön, vagy nem. Továbbá a futtatás ezen a pontján minden objektumhoz meg van határozva egy ún. AABB.\newline Az AABB, angol nevén "Axis-Aligned Bounding Box" , egy tetszőlegesen meghatározott koordináta rendszer tengelyeivel párhuzamos lapok által körbehatárolt téglatest, amellyel hatékonyan lehetséges korai metszés vizsgálatokat elvégezni. Természetesen a program kontextusának esetében két dimenziós AABB-k vannak alkalmazva, amellyel a különböző térképen elterülő objektumokat foglalja közre a program. 
-A program először egyesével dolgozza fel a talált erdőket az alábbi lépésekben:
+Az orientációs térképek feldolgozása után a program számára elérhető az összes erdő, illetve tisztás objektum. Továbbá a futtatás ezen a pontján minden objektumhoz meg van határozva egy minimális nagyságú ún. AABB.\newline Az AABB, angol nevén "Axis-Aligned Bounding Box" , egy tetszőlegesen meghatározott koordináta rendszer tengelyeivel párhuzamos egyenesek által körbehatárolt téglalap, amellyel hatékonyan lehetséges korai metszés vizsgálatokat elvégezni. Ezeket az objektumok beolvasásakor, azok koordinátáinak értékének segítsévél számítja ki a program.
+Ezen a ponton így képes a program egy speciális maszkoló textúrát készíteni, ahol a különböző tisztás objektumok által lefedett területek vannak eltárolva bittérképekhez hasonló módon. Ennek jelentősége az, hogy így konstans időben lekérhető egy adott koordinátához tartozó érték a maszkból, amivel hatékonyan megtudjuk állapítani, hogy egy adott koordináta egy tisztással metszésben áll-e.
+Miután a szoftver elkészítette a tisztásokból megalkott maszkot, a következő lépés sorozatot végzi el szekvenciálisan összes meghatározott erdőre:
 \begin{enumerate}
   \item Az erdő AABB komponensének segítségével allokál magokat a program, úgy hogy azok \begin{math}
     d \in \mathbb{R}
-  \end{math} uniform távolságra vannak egymástól eleinte mind az X, mind az Y tengelyeket nézve.
+  \end{math} uniform távolságra vannak egymástól eleinte külön az X és külön az Y tengelyeket nézve.
   \item Ezek után a program \begin{math}
     u,v \in [0,d/2]
-  \end{math} véletlenszerű értékekkel eltolja minden így létrehozott mag pozícióját az X és Y tengelyeken. 
-  \item Ezek után a program ellenőrzi, hogy így kapott magok metszik-e a jelenleg feldolgozott erdőt. Ha nem, akkor az adott mag megbukik a teszten, a program eldobja mint lehetséges pozíció.
+  \end{math} véletlenszerű értékekkel eltolja minden így létrehozott mag pozícióját az X és Y tengelyeken. Ezen lépés célja a természetben megtalálható asszimetria létrehozása és egy látszólag randomizált vegetáció felépítése.
+  \item Ezek után a program ellenőrzi, hogy az így kapott magok metszik-e a jelenleg feldolgozott erdő területét. Amennyiben ez az ellenőrzés megbukik, akkor az adott magot a program diszkvalifikálja a vegetációból, nem engedi, hogy ezen pozíción növény jelenjen meg.\newline Továbbá a program azt is ellenőrzi az előzőleg konstruált maszk segítségével, hogy bármilyen tisztás metszik-e az éppen vizsgált mag. Hasonlóan eljárva, ha a mag megbukik a teszten, azaz tisztáson belül van, akkor eldobja a program, és a következő magot kezdi ellenőrizni.
+  \item Miután az összes magról el lett döntve, hogy a vegetáció része lehet-e, a program lemaszkolja az erdő területét az ugyaneddig is használt textúrába. Ennek az az oka, hogy előfordulhatnak olyan esetek, ahol két vagy több erdő objektum metszésben áll egymással, ami azt jelentené, hogy ezek az átfedésben lévő területek sűrűbb növényzettel fognak rendelkezni az összes többi régiónál. Ez esetünkben azonban hibás viselkedésnek számítana, ami viszont erdők maszkolásával egyszerűen megoldható.
 \end{enumerate} 
 
+Ezen folyamat elvégzésével a megmaradt magok mind a szimulált növényzet egyedeivé válnak, és tovább lépnek a következő lépésre.
 
-\todo{IDe lehetne mondjuk egy objektum feldolgozását leíró kódrész}
-Objektumokat befoglaló AABB segítségével uniform módon 
+\begin{minted}[fontsize=\footnotesize]{cpp}
+std::vector<Seed> Generator::InitializeSeedsOnObject(float density, const Object& object)
+{
+    const auto bounding_box = object.bounding_box();
+    std::vector<Seed> seeds;
+    const float offset = density / 2;
+
+    const size_t seeds_per_row = std::floor(bounding_box.width() / density);
+    const size_t seeds_per_column = std::floor(bounding_box.height() / density);
+    const size_t number_of_seeds = std::floor(bounding_box.width() * bounding_box.height() / density);
+
+    if (seeds_per_column == 0 || seeds_per_row == 0 || number_of_seeds == 0)
+        return seeds;
+
+    seeds.reserve(number_of_seeds);
+
+    for (size_t i = 0; i < seeds_per_column; i++)
+    {
+        for (size_t j = 0; j < seeds_per_row; j++)
+        {
+            Spatial2D list = {offset + j * density, offset + i * density};
+            list = bounding_box.min() + list;
+            seeds.emplace_back(list);
+        }
+    }
+    Randomize(seeds, density);
+    Cull(seeds, object);
+
+    seed_masker_.MaskObject(&object);
+
+    return seeds;
+}
+\end{minted}
+
+\subsection{Megfontolások a metszésvizsgálatokról}
+
+Mint előzőleg részletezve lett, a program az objektumokkal való metszésvizsgálatok elvégzéséhez raszterizációs módszerekkel elkészített maszkokat használ. Ezzel mint említve lett, konstans időben képes a program egy tetszőleges koordinátáról eldönteni, hogy valamilyen tereptárgyon, tisztáson vagy erdőn belül fekszik-e. \newline Ennek azonban több hátránya is van. Egyrészt világos az, hogy raszterizációs módszerek, mivel véges számú ún. pixelt vagy bitet tárolnak el, ezért pontosságok meglehetően korlátozott. Ezért előfordulhat olyan eset, ahol egy metszés vizsgálat hibás pozitív értéket ad vissza a programnak, és így eldobhat vagy megtarthat olyan magot, amelyet valójában nem szabadott volna.\newline
+Ennek orvoslására lehet nagyobb felbontású maszkoló textúrát alkalmazni, amellyel így több részlet tud a program lefedni a raszterizálás során. Jelenleg ezt a megoldást alkalmazza a szoftver is és így egy négyszeres nagyságú maszkoló textúrával végzi el a különböző műveleteket. Ezáltal kevesebb hamis pozitív érték születik a különböző vizsgálatoknál.\newline
+Világos azonban, hogy ez egyben egy memória igényes megoldás is. Ezért a témakör kidolgozásakor eleinte ún. térbeli indexelési módszerek voltak megvizsgálva. Ezeknek a módszereknek a lényege az, hogy a rendelkezésre álló teret és abban található objektumokat és/vagy pontokatat egy valamilyen fa struktúrában írják le, amelyek gyors és hatékonyan keresési, felépítési és/vagy beszúrási műveleteket támogatnak. Mivel esetetünkben komplexebb két dimenziós objektumokról van szó amelyek poligonékként vannak ábrázolva, így a \cite{10.1145/602259.602266} cikkben összefoglalt, úgy nevezett R-fák használata volt megfontolva. Az R-fák olyan két N-dimenziós fák, amelyek expliciten több pontból álló objektumok tárolására és gyors indexelésére lettek tervezve. Két dimenziós esetben alkalamazva ezek a fák minden egyes tárolt objektumra meghatároznak egy minimális méretű befoglaló négyzetet, illetve minden csomópontjukat is hasonló módon ilyen befoglaló négyzetként kezelik. Így hatékonyan képesek egy tetszőleges pontról megállapítani, hogy bármilyen objektumon belül található-e meg.\newline
+Végül az ok amiért ezen adatstruktúrák nem lettek alkalmazva a programban az volt, hogy nem volt egyértelmű hogy mennyire illene ezen adatszerkezet a problémakörhöz. Egyrészt, mivel egy tájfutótérkép rengeteg objektumot is tárolhat egyszerre amelyek átfedésben lehetnek, ezért további utánna járás szükésges azzal kapcsolatban, hogy mennyire jól kezelik valójában ezek az adatstruktúrák az átfedéseket. Továbbá a tájfutótérkép formátumok implementációjának végeképp semmi sem akadályozza meg azt, hogy egész térképeket lefedő objektumok legyenek használva. Ez megint csak megnehezítheti a metszés vizsgálatokat, vagy akár el is ronthatja az adatstruktúra minőségét. 
+
+
+\subsection{Hibásan formázott térképek kezelése}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth,height=300px]{images/eredeti_terkep.jpg}
+    \caption{Eredeti térkép hiányos erdő jelölésekkel}
+\end{figure}
+A téma feltárásakor egy másik, a tájfutótérképek minőségével kapcsolatos gond is felmerült, amely az eleinte megadott magok mennyiségét, illetve a lefedett terület nagyságát korlátozta. Mivel alapvetően ezek a orientációs térképek elsősorban valóvilágbeli versenyekben alkalmazott segédeszközök, így azzal a céllal vannak elkészítve, hogy vizuális segédletet nyújtson egyrészt a versenyzők, másrészt a szervezők számára. Ez azt is jelenti, hogy a legtöbb térkép mindenekelőtt nyomtatáshoz van megtervezve, azaz alapból egy fehér alapon megjelenő formátumban lesz kezelve. Vélhetően a nyomtatás könnyítésének, illetve a térkép összeállításának meggyorsításának érdekében, több olyan tájfutótérkép fájllal is találkoztam a szakdolgozat kidolgozása során, amelyek nem használták az ISOM 2017-es sztenderhez tartozó, fehér színt használó "405 Forest" jelölést. Helyette a papír, illetve a szerkesztő program hátterének színe jelezte ezekben az esetekben az ilyen erdős részeket, ugyanis sokszor a térkép közepén voltak ezek az "üres" területek megfigyelhetőek.\newline
+Ezek az esetek így felhívták a figyelmet egy olyan szituációra, ahol a térkép jelentős része a fájl beolvasásának szempontjából üres, azonban mint vizuális médium ugyanúgy tartalmazhat információt a felhasználójának számára. Ennek tudatában kettő opció lett megvizsgálva. Egyrészt természetesen adódna az, hogy csakis az explicten megadott objektumokkal dolgoz tovább a program, hiszen hivatalos sztenderedek alapján igenis használni kellene a megadott jelöléseket, beleértve az előbbiekben felsoroltak. Ez azonban továbbra kevésbé optimális vegetációt eredményezett volna sok esetben. Így különböző megoldások lettek fontolóra véve, amellyel egy térkép burkát lehetne expliciten megadott pontjaiból megállapítani, majd a belső részét elkülöníteni a térképhez nem hozzátartozó részektől.\newline
+További kutatás során végül az ún. "alpha shapes" topológiai eszközt alkalmazó, konkáv burok\cite{alphaShapesArticle} meghatározó módszer alkalmazása mellett lett döntve. Egy "alpha shape"  két dimenzióban leírt pontok alakját hivatott meghatározni úgy, hogy egy tetszőleges alfa érték segítségével éleket helyez azon pontok közé, amelyeknél ha mindkét pontból egy alfa sugarú kört vetítünk, akkor metszetük nem üres.\newline
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth,height=300px]{images/alpha_shape.jpg}
+  \caption{Egy térkép köré rajzolt körvonal "alpha shape" segítségével. A kék pontok a térkép objektumok pontjait jelölik, míg a piros vonal megtalált alakzat határoló vonalát ábrázolja.}
+\end{figure}
+
+Ennek megoldására lett alkalmazva végül a CGAL könyvtárcsomagban megtalálható "Alpha shapes"-t implementáló könyvtár is, amely segítségével megtudjuk kellő pontossággal állapítani a  térkép objektumainak pontjai által leírt alakzatát.
 
 
 
+\begin{figure}[H]
+  \centering
 
-Ez azért fontos számunkra, ugyanis 
-A program által kezelt tájékozódási futó térképek esetén az egyes területek megadhatóak, illetve közelíthetőek poligonok segítségével, amelyeket 
+  \subcaptionbox{Generált növényzet "alpha shape" alkalmazása nélkül}{
+    \includegraphics[width=0.45\textwidth,height=200px]{images/alphashapesnelkul.jpeg}
+  }
+  \hspace{5pt}
+  \subcaptionbox{Generált növényzet "alpha shape" alkalmazásával}{
+    \includegraphics[width=0.45\textwidth,height=200px]{images/alphashapesalkalmaz.jpeg}
+  }
+  \caption{Generált növényzetben való különbség "alpha-shape"-ek alkalmazásával és anélkül}
+\end{figure}
 
-
-\subsection{Növények ütközésvizsgálata objektumokkal}
-
-\todo{kd-tree vagy R-tree említése, ezt miért lett volna jobb/rosszabb}
-
-\subsection{Rosszul formált térképek kezelése}
-
-Erdő mint szimbólum kihagyása
 
 \section{Egyedek fajhoz való besorolása}
 
+Miután a növényzetet alkotó egyedeket meghatározta a program, következőnek a bemeneti argumentumként megadott fajokhoz való besorolást végzi el minden egyedre.
+Ez egy kétlépcsős folyamat, ahol elsőlépésben egy kezdeti halmazra határozza meg a program külső, ún. abiotikus befolyásoló tényezők alapján az egyes egyedek faját. Ezek után pedig szomszédsági döntéshozatal segítségével állapítja meg a maradék növényekhez tartozó fajokat.
+A futtatási folyamat során mindig 20\%, illetve 80\%-os felbontással dolgozik ennél a résznél a program, azaz a növények 20\%-ról mindig abiotikus befolyásoló tényezők segítségével, 80\%-ról pedig többségi szomszédsági szavazással határozza meg a fajukat. Ez a fajta felbontás természetesen szinte bármilyen arányban történhetne, és így ennek megválasztása inkább konkrét alkalmazási területhez kapcsolódik, amelyeknek feltárása is igen fontos lehet a jövőre nézve.
+
 \subsection{Kezdeti egyed halmaz megállapítása}
+
+Ebben a lépésben a program véletlenszerűen kiválasztja az egyedek húsz százalékat, amelynek halmazára a továbbiakban kezdeti növényekként illetve kezdeti halmazként lesz utalva.
+A lépés célja, hogy a  megadott diffúziós pontok, illetve magasság térkép alapján kiszámítsa, hogy az kezdeti halmazba tartozó egyedek mindegyike melyik fajhoz a legvalószínűbb, hogy tartoznak. Ennek megállapítása a \cite{Gasch2022} cikkben leírt módszerrel történik, miszerint először is normalizáljuk a növényfajok karakterisztikájával megkapott magasság és meredekség eloszlásokat, illetve normalizált távolságot veszünk a diffúziós pontoktól, amelyek így mind egy fajta súlyozást adnak az különböző növényfajok valószínéségre az adott egyednél.
+\todo{ Itt valósznűleg bővebben is ki lehetne fejteni a dolgokat}
+
+\begin{minted}[fontsize=\footnotesize]{cpp}
+
+    //...
+    for (auto& seed_idx : initial_set_indices_)
+    {
+        auto& seed = seeds_[seed_idx];
+        auto offset = map_->GetBoundingBox().min();
+        Coord2 seed_coord(std::round(seed.coordinate[0] - offset[0]), std::round(seed.coordinate[1] - offset[1]));
+
+        size_t max_idx = 0;
+        float max_value = 0.f;
+
+        // ...
+
+        for (size_t attr_idx = 0; attr_idx < attributes_.size(); attr_idx++)
+        {
+            auto attr = attributes_[attr_idx];
+            auto height_w_normalized = 1.f;
+            auto slope_w_normalized = 1.f;
+            auto diff_w = 0.f;
+
+            float height_c = 1.f;
+            float slope_c = 1.f;
+            float diff_c = 1.f;
+
+            if (height_map_)
+            {
+                auto height_w = attr.elevation.CalcDistribution(height_map_->HeightAt(seed_coord));
+                auto slope_w = attr.slope.CalcDistribution(height_map_->SlopeAt(seed_coord));
+                height_w_normalized = (height_extremities_per_species[attr_idx].max - height_w) / (
+                    height_extremities_per_species[attr_idx].max - height_extremities_per_species[attr_idx].min);
+                slope_w_normalized = (slope_extremities_per_species[attr_idx].max - slope_w) / (
+                    slope_extremities_per_species[attr_idx].max - slope_extremities_per_species[attr_idx].min);
+            }
+
+            for (auto zone : diffusion_zones_)
+            {
+                if (zone.id == attr_idx)
+                {
+                    auto dist = seed.coordinate.DistanceTo(zone.center);
+                    auto val = 1 - dist / zone.radius;
+
+                    if (diff_w < val)
+                        diff_w = val;
+                }
+            }
+
+            float value = height_w_normalized * height_c + slope_w_normalized * slope_c + diff_w * diff_c;
+
+            if (value > max_value)
+            {
+                max_value = value;
+                max_idx = attr_idx;
+            }
+        }
+
+        seed.species_id = max_idx;
+        seed.flags |= Classified;
+    }
+  //...
+\end{minted}
 
 \subsection{Szomszédossági besorolás}
 
-\section{Vegetáció területének maximalizálása}
-
-\section{Növényzet megjelenítés}
-
-A növényzet diverzebbnek ható megjelenítésére jövőbeli megoldás lenne egy összetettebb adatbázis rendszer készítése, ahol a különböző fajokhoz a valósághoz hűbb reprezentációk vannak előre elkészítve számunkra. Továbbá egy másik megoldás lenne a testhálók procedurális generálása a program futása közben. Bármelyik implementálásával  egy vizuálisan érdekesebb élményt tudna az applikáció adni a felhasználónak, azonban mindenféleképpen érdemes a  megoldások gépi erőforrás igényességét is megvizsgálni.
-
-Folyamat leírása:
-
-AlgLib könyvtár használata + Nanoflann (KD fa felépítése szomszédok megtalálására)
-
+\todo{AlgLib könyvtár használata + Nanoflann (KD fa felépítése szomszédok megtalálására)}
 Részgráfokra bontás -> Mely növények vannak közel egymáshoz, ezek tudják egymást "méretét" korlátozni
 
 Részgráfok felépítése, majd egymás közötti relációk felépítése AlgLib számára
 
+\section{Vegetáció területének maximalizálása}
+
+
 Optimalizáció elvégzése
 
-0 nagyságú növények eltávolítása
+Minimum nagyságot nem elérő növények eltávolítása
 
 Folyamat megismétlése hogy a méreteket stabilizáljuk
-
 Megfontonlandó dolgok:
 
 Az eredmények pontossága -> Meg lehet figyelni, hogy egyes lineáris megkötések, amelyek a növények közötti távolságon alapulnak, nem fognak teljesülni, olyan 0.00001-es nagyságrendűleg pontatlanság figyelhető meg
 
 Okok: Optimalizációs folyamat megállási paraméterein kell fejleszteni -> Milyen paraméterek lennének esetünkben megfelelőek
+
 \todo{}
+
+\section{Növényzet megjelenítés}
+
+
+
+\todo{}
+A növényzet diverzebbnek ható megjelenítésére jövőbeli megoldás lenne egy összetettebb adatbázis rendszer készítése, ahol a különböző fajokhoz a valósághoz hűbb reprezentációk vannak előre elkészítve számunkra. Továbbá egy másik megoldás lenne a testhálók procedurális generálása a program futása közben. Bármelyik implementálásával  egy vizuálisan érdekesebb élményt tudna az applikáció adni a felhasználónak, azonban mindenféleképpen érdemes a  megoldások gépi erőforrás igényességét is megvizsgálni.
 
