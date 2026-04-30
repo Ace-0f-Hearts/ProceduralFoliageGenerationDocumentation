@@ -480,7 +480,15 @@ A lépés célja, hogy a  megadott diffúziós pontok, illetve magasság térké
 
 \subsection{Szomszédossági besorolás}
 
-A maradék növények fajának mivoltát ezeke után 
+A természetben is általában az ugyanazon fajokhoz tartozó egyedek esélyesebben találhatóak meg közelebb egymáshoz terjedésük, illetve szaporodások folyamatából adódóan. Ennek szimulálásának kidolgozása a \cite{Gasch2022} kutató munkában van részletesen kifejtve, mely szerint az eddigiekben meghatározott fajú egyedek hatással vannak a körülöttük lévő növényzet tagjaink fajának megválasztására. A továbbiakban az általuk leírt módszert az programban is alkalamazva, tekintve annak hatékonyságát. A jövőben akár más módszerek, mint például \cite{LanePrusinkiewicz}-ban leírt kernelek alkalmazása további kutató munkát igényel.
+A folyamat megvalósítására végül a 3-nn algoritmus, másnéven 3-legközelebbi szomszéd algoritmus van alkalmazva \cite{kNN1053964}. Az módszer esetünkben a következő takarja: A program minden egyes megmaradt pontra megvizsgálja, hogy a kezdeti halmazból mely három egyed  esik a legközelebb hozzá. A legközelebbi egyedek megtalálása után elérhető a program számára, hogy fajonként hány egyed található a legközelebb az adott ponthoz. Végül azon faj azonosítója lesz az éppen vizsgált egyedhez hozzá rendelve, amelynek egyedeiből a legtöbb lett megtalálva a 3-nn algoritmus során. Itt érdemes megjegyezni, hogy az algoritmust tetszőleges $k \in \mathbb{N}$ darab szomszéd keresésével is lehetne alkalmazni, a $k = 3$ csupán előző kutató munkákban ajánlott választás a problémakört tekintve.
+\newline
+
+A generálás sebességének érdekében fontos megfontolás volt többek között az előző lépés optimalizálása. Mivel gyakran több ezer, akár több tíz ezer növényt is allokálhat a program, ezért egy tetszőleges növény $k \in \mathbb{N}$ darab szomszédjának megtalálása nem triviális feladat. A naiv megoldás $\N \in \mathbb{N}$ növény esetén $\O(n^2)$ aszimptotikus futási idővel rendelkezne, amely így a súlyosan megnövelné a program futási idejét.
+Ennek megoldására léteznek különböző térbeli indexelési módszerek pontokra. A témakör kidolgozásakor két ilyen módszer is meg lett vizsgálva, amelyik közül végül csak egy maradt meg a program végleges változatában.
+Az első ilyen módszer ún. Quad-fák segítségével kívánta lecsökkenteni a távolság vizsgálatok mennyiségét\cite{Finkel1974}. Többszöri tesztelés folyamán azonban a módszer nem bizonyult sikeresnek, ugyanis a pontok mennyisége, sűrűsége és nagy területen való elterülése túlságosan mély fákat eredményezett, amelyek korlátozták annak teljesítményét és használhatóságát.
+A második módszer, amely végül sikeresnek is bizonyult, kd-fák alkalmazásával oldotta meg a problémát\cite{Bentley}. Ezen fák ugyanis láthatóan sokkal jobban illeszkedenek a problémakörben található ponthalmazokhoz. Továbbá ezen algoritmus ugyanúgy empirikusan meghatározott $\O(log n)$ átlagos futási időt biztosít egy ponthoz legközelebbi szomszédok keresésekor.     
+Az ebben a lépésben alkalmazott kd-fákat a Nanoflann C++ könyvtár segítségvel építi fel a szoftver, amely így hatékonyan tudja elvégezni a fentebb leírt komplex algoritmusokat.
 
 
 \todo{AlgLib könyvtár használata + Nanoflann (KD fa felépítése szomszédok megtalálására)}
@@ -490,6 +498,9 @@ Részgráfok felépítése, majd egymás közötti relációk felépítése AlgL
 
 \section{Vegetáció területének maximalizálása}
 
+
+Miután megvan az összes egyed pozíciója illetve faji azonosítója, már csak az egyet méretének kiszámolása maradt mint a program feladata.
+Ezt mint egy nem-lineáris optimalizációs feladat van megfogalmazva a \cite{Gasch2022} cikkben, miszerint a vegetáció által lefedett terület maximalizálása lesz az alkalmazott módszer elsődleges célja.   
 
 Optimalizáció elvégzése
 
