@@ -539,7 +539,7 @@ Ennek egyszerűsítésére azonban tudjuk azt ez elgondolást alkalmazni, hogy v
 
 Ezt az elgondolást a program is alkalmazza: Egy-egy optimalizációs lépést csakis az egyedek egy részhalmazára végez el, amelynek tagjait az egyedek egymáshoz való távolsága szerint szabályozza. Így valójában részgráfokat képez futtatás közben, amelynek egyedi között abban az esetben található él, amikor azok távolsága kisebb mint a kettő maximum méretének összege.
 
-Fontos egyúttal, hogy habár a növények minimális mérete nem feltétlen egyenlő a nullával, az alkalmazásból kifolyólag előnyben részesítjük a nagyobb egyedeket a kisebbekkel szemben. Így érdemes megengedni, hogy az egyes egyedek méretei a minimális méretük alá csökkenjen, annak érdekében, hogy később ezeket kitöröljük a vegetációból és esélyt adjunk a nagyobb egyedek megjelenésére.
+Fontos egyúttal, hogy habár a növények minimális mérete nem feltétlen egyenlő a nullával, az alkalmazásból kifolyólag előnyben részesítjük a nagyobb egyedeket a kisebbekkel szemben. Így érdemes megengedni, hogy az egyes egyedek méretei a minimális méretük alá csökkenjen, annak érdekében, hogy később ezeket kitöröljük a vegetációból és esélyt adjunk a nagyobb egyedek megjelenésére. Utóbbit az optimalizásáli lépés többszöri futtatásával hajtjuk végre, a minimális méretüket el nem érő egyedek kitörlésének elvégzésével az első futtatás kivételével minden futtatás előtt. 
 
 A program ezen maximalizációt az AlgLib nevű, numerikus algoritmusok implementációjáért felelős C++ könyvtár segítségével végzi. A könyvtárral kapcsolatos észrevétel volt, hogy használata további finomításokat igényel, szükséges lenne a feladatkörhöz igazítani a paramétereit, ugyanis némi pontatlanság figyelhető meg a lineáris megkötések betartása kapcsán. Ezek azonban semmiféleképp nem olyan megoldhatatlanok vagy zavaróak a jelenlegi alkalmazását tekintve. 
 
@@ -573,12 +573,21 @@ A program ezen maximalizációt az AlgLib nevű, numerikus algoritmusok implemen
 
 
 
-\todo{}
 
-\section{Növényzet megjelenítés}
+\section{Növényzet tárolása}
+A növényzet összeállításának befejeztével a generáló program összeállítja annk megjelenítéséhez szükséges adatok. Ez összeségében a növényzet egyedeinek listáját, a növényzetet alkotó fajok listáját, az raszterizált térképet, a magasság térképet, illetve a térkép dimenzióbeli paramétereit foglalja magában. A program bezárása előtt a felhasznált erőforrásokat felszabadítja, majd a felhasználói réteg visszakapja az irányítást.
 
+Ezek után a felhasználónak lehetősége van a generált konfigárció betöltésére, amely az előzőleg  tartalmazott adatok elérési útvonalát tárolja. Annak érdekében azonban, hogy a felhasználó szabadon állíthassa át az előzőleg futtatott generáláshoz felhasznált adatokat anélkül, hogy befolyásolná az így korábban elkészült konfigurációnak beállításait, a program mindig egy másolatot készült a felhasznált fájlokról. Ezeket a másolatokat a program saját magának lefoglalt könyvtárban tárolja.
 
+\section{Növényzet megjelenítése}
 
-\todo{}
-A növényzet diverzebbnek ható megjelenítésére jövőbeli megoldás lenne egy összetettebb adatbázis rendszer készítése, ahol a különböző fajokhoz a valósághoz hűbb reprezentációk vannak előre elkészítve számunkra. Továbbá egy másik megoldás lenne a testhálók procedurális generálása a program futása közben. Bármelyik implementálásával  egy vizuálisan érdekesebb élményt tudna az applikáció adni a felhasználónak, azonban mindenféleképpen érdemes a  megoldások gépi erőforrás igényességét is megvizsgálni.
+A vegetáció megjelenítéséhez a Godot játékmotor render szerverét használja fel a program, amivel akár a növényzet egészét is megtudja jeleníteni a program. A növényzet megjelenítése jelenleg egy távolság alapú, ún. "level-of-detail" optimalizációt alkalmaz annak érdekében, hogy minél több egyedet tudjon renderelni a program. Ezt az egyedeknek beállított maximum láthatósági távolsággal oldja meg motor, amellyel az esetlegesen túl messze lévő objektumokat nem rendereli a szerver. Ez olyan eseteknél igazán fontos, ahol az egész térkép látszódik, és így több tízezer növény és renderelve lenne.
+Továbbá csakis egy adott, kamerától való távolságon belül használ a program nagyobb minőségű testhálókat, hiszen a különböző részletek ezeknél úgy is elveszne adott távolságokon túl. Ehelyett így egy ún. "billboard" módszerrel megoldott, a kamera felé irányított textúrát tölt be a program. Ezeknek megjelenítése ilyenkor nyilvánvalóan kevesebb erőforrást igényel, továbbáb adott távolságokon belül a kevésbé is észrevehetőek az textúra és a testháló között látható különbségek. 
+
+\todo{
+  Visibility code ide lehet, mert az még egészen érdekes tud lenni
+}
+
+Mint korábban az említve lett, jelenleg az alkalmazott testhálók által reprezentált fajok, illetve a generálásban felhasznált fajok között nincsen kapcsolat. A vegetáció valóságosabb vizualizálásához azonban ez mindenféleképpen egy olyan terület, amelyen a jövőben többféle módon is javítani lehetne.   
+A növényzet diverzebbnek ható megjelenítésére jövőbeli megoldás lenne például egy összetettebb adatbázis rendszer készítése, ahol a különböző fajokhoz a valósághoz hűbb reprezentációk vannak előre elkészítve az alkalmazás számára. Továbbá egy másik megoldás lenne a testhálók procedurális generálása a program futása közben, amelyre szintúgy több jelenlegi megoldás is létezik. Bármelyik implementálásával egy vizuálisan érdekesebb élményt tudna az applikáció adni a felhasználónak, azonban mindenféleképpen érdemes az alkalmazott megoldások gépi erőforrás igényeit is megvizsgálni.
 
