@@ -1,13 +1,9 @@
 \chapter{Fejlesztői dokumentáció}
 \label{ch:impl}
 
-\todo{Bevezető}
+A dokumentáció következő soraiban van tárgyalva a program archiktúrája, annak implementációs és kommunikációs szempontból fontos adatszerkezetei, illetve a futtatáskor elvézett fő feladatok logikája, leírása. A program elkészítésekor alkalmazott filozófia volt továbbá, hogy egy olyan eszköz legyen implementálva, amely végül egyéb programok által használható is lehessen, demonstrálva ezzel egy másfajta megközelítést a procedurális növényzet generáláshoz. Architektúrális és implementációs döntések így többek között ezen céllal is születtek.
 
 \section{Program architektúra}
-
-\todo{Godot-ról, illetve az exectuion kódról is beszéjünk itt Godot, Generátor terminál program amit meghívunk kapcsolata
-Generátor programban alkalmazott könyvtárak}
-
 Az elkészült program két nagyobb részre taglalható funkcionalitás szempontjából. 
 A szoftver architektúra első nagyobb komponense egy C++ programozási nyelvben elkészített, elsősorban terminálból futtatható programrészlet, amely egy növényzet procedurális generálását hajtja végre. Az így elkészült projekt felépítéséhez, teszteléséhez és struktúráláshoz a CMake eszközcsomag lett használva, amely kifinomult beállítási és kezelési lehetőségeket adott  a projekt megírása során. Ezen programrészlet elkészítésénél továbbá szempont volt az, hogy a felhasználó nem ezzel a rétegével fog elsősorban közvetlen kapcsolatba lépni a programnak, hanem egyéb programok fogják ezt az eszközt futtatásuk során használni. Ennek megvalósításának érdekében így több bemeneti paramétere is állítható a programnak, illetve a kimeneti értékeinek formátumát is meg tudjuk változtatni a könnyebb kezelés érdekében. Az így elkészült futtatható állomány több könyvtárat is alkalmaz az általa végzett operációk során, amelyeknek szerepe a generátor lépések leírásánál van részletesen taglalva. Legtöbbjük a Microsoft által közzétett  VCPKG csomagkezelő rendszerrel segítségével lett kezelve, ugyanis ez egy robosztus és több platformon használható megoldásnak bizonyult. \newline
 A második architektúrális réteg a nyitott forráskódú Godot játékmotorra, illetve a Mono keretrendszerre épülő, C\# programozási nyelvben megírt programrészlet. Ez a réteg kerül közvetlen kapcsolatba az aktorral és köti össze azt a generálás elvégzésért felelős rendszerrel. A játékmotor kifinomultságát köszönhetően ugyanis egy átláthatóbb felhasználói élményt lehet a nyújtani ezzel a megoldással, illetve nyilvánvalóbb és egyértelműbb visszajelzéseket tud a program a felhasználónak adni a használata közben. Ezzel a kettéosztással továbbá elkerülhetjük azt, hogy a felhasználónak bármilyen terminálban végzett, bonyolultabb munkaműveleteket kelljen végeznie a program használata során. Ezen kívül az elérhető render motor robosztus alapot ad a generált növényzet reprezentatív vizualizására, amelynek segítségével a felhasználó képes szoftvertől kapott eredményeit azonnal megjeleníteni és ellenőrizni.\newline
@@ -237,7 +233,6 @@ A konfigurációs fájl egy opcionális érték a generáló programrétegtől, 
 \pagebreak
 
 \section{Térképek beolvasása}
-\todo{Kód arról, hogy hogyan szerezzük meg az objektumokat és szimbólumokat VÉGSŐ ESET}
 
 Az korábban részletezett orientációs térképek formátumokból három fajta információt használ a program a generálás elvégzéséhez:
 \begin{itemize}
@@ -249,8 +244,7 @@ Az korábban részletezett orientációs térképek formátumokból három fajta
     \item \textbf{Utakat jelző objektumok}: Zárt vagy nyílt utakból álló tereptárgy, amely által esetlegesen bezárt rész nem képzi részét az objektumnak. 
   \end{itemize}
   \item \textbf{Szimbólumok}: A szimbólumok a velük asszociált objektumok vizuális komponenseit foglalják össze. Programunk ezek azonosító számának segítségével kategorizálja az egyes területek befolyását a generálás eredményére, továbbá a szimbólumok vizsgálatával tudja a program a növényzet szimulálás lépéseinél irreleváns objektumokat kiszűrni. Az objektumokhoz hasonlóan itt is három fajta, témakörhöz releváns szimbólum típust különböztetünk meg.
-\todo{Osztály diagram Base + Child}
-  \item \textbf{Georeferencia értékek}: Többek között a térkép által leírt terület skálázásához, illetve projektív és térkép koordináták közötti konverziókhoz szükséges értékeket foglalja önmagába. Ezek az értékek az objektumok koordinátáinak kinyerésénél szükségesek annak érdekében, hogy a valós méretarányokhoz közelebbi eredményeket érjünk el a vegetáció elkészítésekor, illetve ahhoz, hogy a műveletek során azonos méretarányokkal kezelje a program a növényegyedeket és a térkép objektumait. 
+  \item \textbf{Georeferencia értékek}: Többek között a térkép által leírt terület skálázásához, illetve projektív és térkép koordináták közötti konverziókhoz szükséges értékeket foglalja önmagába. Ezek az értékek az objektumok koordinátáinak kinyerésénél szükségesek annak érdekében, hogy a valós méretarányokhoz közelebbi eredményeket érjünk el a vegetáció elkészítésekor, illetve ahhoz, hogy a műveletek során azonos méretarányokkal kezelje a program a növényegyedeket és a térkép objektumait. A transzformáció elvégzésének módszere a \ref{code:georef} forráskódban leírt történik. Forráskódban leírt módszer továbbá egy másik, nyílt forráskódú kódbázis alapján lett értelmezve és felhasználáshoz a jelenlegi formájában: \href{https://github.com/OpenOrienteering/mapper/blob/162b78212196c3fed97946608e463bf2ffaaf761/src/core/georeferencing.cpp}{OpenOrienteering Mapper (kódbázishoz vezető link)}
 
 \end{itemize}
 
@@ -260,16 +254,10 @@ Az korábban részletezett orientációs térképek formátumokból három fajta
   \caption{Az objektumok a tárolt típusuk alapján választják meg milyen módon végeznek metszés vizsgálatot a kért ponttal.}
 \end{figure}
 
-\pagebreak
 
 \begin{listing}[H]
   
 \begin{minted}[fontsize=\footnotesize]{cpp}
-
-//A kód az a következő nyílt forráskódú kódbázis alapján lett értelmezve és átemelve a jelenlegi formájába:
-//https://github.com/OpenOrienteering/mapper/blob/162b78212196c3fed97946608e463bf2ffaaf761/src/core/georeferencing.cpp#L1037
-
-
 //FoliageGen/src/ocad/ocad_georef.cpp
 void Georeferencing::UpdateTransformation()
 {
@@ -284,14 +272,12 @@ void Georeferencing::UpdateTransformation()
     to_projected_ = transform;
 }
 \end{minted}
-\caption{Georeferencia értékek segítségével összeállított transzformáció számítása}
+\caption{Georeferencia értékek segítségével összeállított transzformáció számítása.}
+\label{code:georef}
 \end{listing}
 
 
 A különböző utakból álló objektumok ún. poli-szakaszokkal vannak megvalósítva. A poli-szakaszok olyan utak, amelyek egyenes szakaszok segítségével vannak összeillesztve. Az eredeti tájfutótérkép formátumokban használt objektumok azonban egyenes szakaszokból, illetve Bézier görbékből is állhatnak, amelyek pontjai speciális módon vannak megadva. A generálás egyes lépéseiben végzett későbbi metszés vizsgálatok, illetve objektumokat befoglaló négyzetek számításának érdekében így szükséges ezen Bézier görbéket további poli-szakaszokkal közelíteni. Ez természetesen valamennyi pontatlansághoz vezethet a komplexebb görbék esetén, viszont a generált növényzetre továbbra is elhanyagolható hatással bír.
-
-\todo{Algoritmus?}
-
 \section{Egyedek koordinátáinak meghatározása}
 
 A vegetáció egyedeinek allokálása a pozíciójának meghatározásával kezdődik. Ez egy több lépéses folyamat, amelynek ütemei a következő szekciókban vannak taglalva.
@@ -380,13 +366,13 @@ Ezek az esetek így felhívták a figyelmet egy olyan szituációra, ahol a tér
 További kutatás során végül az ún. "alpha shapes", azaz alfa alakzatok topológiai eszközt alkalmazó, konkáv burok\cite{alphaShapesArticle} meghatározó módszer alkalmazása mellett lett döntve. Egy alfa alakzatok esetünkben két dimenzióban leírt pontok alakját hivatottak meghatározni egy tetszőleges alfa érték segítségével. Lényege, hogy egy pont felhő esetén az alfa alakzat éleket feszít azon pontok közé, amelyekből a konstruált alfa sugarú körök közös pontokkal rendelkeznek.
 
 
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.7\textwidth]{images/alpha_shape.jpg}
-  \caption{Egy térkép köré rajzolt körvonal "alpha shape" segítségével. A kék pontok a térkép objektumok pontjait jelölik, míg a piros vonal megtalált alakzat határoló vonalát ábrázolja.}
-\end{figure}
+% \begin{figure}[H]
+%   \centering
+%   \includegraphics[width=0.7\textwidth]{images/alpha_shape.jpg}
+%   \caption{Egy térkép köré rajzolt körvonal alfa alakzatok segítségével. A kék pontok a térkép objektumok pontjait jelölik, míg a piros vonal megtalált alakzat határoló vonalát ábrázolja.}
+% \end{figure}
 
-Ennek megoldására lett alkalmazva végül a CGAL könyvtárcsomagban megtalálható "Alpha shapes"-t implementáló könyvtár is, amely segítségével megtudjuk kellő pontossággal állapítani a  térkép objektumainak pontjai által leírt alakzatát.
+Ennek megoldására lett alkalmazva végül a CGAL könyvtárcsomagban megtalálható "Alpha shapes"-t implementáló könyvtár is, amely segítségével megtudjuk kellő pontossággal állapítani a  térkép objektumainak pontjai által leírt alakzatát. Ennek, illetve az előző lépésekben elkészített maszkoló textúra segítségével pedig a program megtudja állapítani, hogy egy adott mag a térképen, belül található-e, illetve egy már feldolgozott erdőn vagy tisztáson belül helyezkedik-e el. Amennyiben mindkettő kérdésre nemmel válaszol a program, az adott mag a növényzet egyedévé válik. 
 
 
 
@@ -394,16 +380,16 @@ Ennek megoldására lett alkalmazva végül a CGAL könyvtárcsomagban megtalál
   \centering
 
   \subcaptionbox{Generált növényzet "alpha shape" alkalmazása nélkül}{
-    \includegraphics[width=0.45\textwidth]{images/alphashapesnelkul.jpeg}
+    \includegraphics[width=0.45\textwidth, frame]{images/alphashapesnelkul.jpeg}
   }
   \hspace{5pt}
   \subcaptionbox{Generált növényzet "alpha shape" alkalmazásával}{
-    \includegraphics[width=0.45\textwidth]{images/alphashapesalkalmaz.jpeg}
+    \includegraphics[width=0.45\textwidth, frame]{images/alphashapesalkalmaz.jpeg}
   }
   \caption{Generált növényzetben való különbség "alpha-shape"-ek alkalmazásával és anélkül. A pontok az egyes növény egyedeket jelölik.}
 \end{figure}
 
-
+\pagebreak
 \section{Növény fajok megállítása}
 
 Miután a növényzetet alkotó egyedeket meghatározta a program, a bemeneti argumentumként megadott fajokhoz való besorolást végzi el minden egyedre a következő lépésben.
@@ -413,34 +399,27 @@ A futtatási folyamat során mindig 20\%, illetve 80\%-os felbontással dolgozik
 \subsection{Kezdeti egyed halmaz megállapítása}
 
 Ebben a lépésben a program véletlenszerűen kiválasztja az egyedek húsz százalékat, amelyre a továbbiakban kezdeti növényekként illetve kezdeti halmazként lesz utalva.
-A lépés célja, hogy a  megadott diffúziós pontok, illetve magasság térkép alapján kiszámítsa, hogy az kezdeti halmazba tartozó egyedek mindegyike melyik fajhoz a legvalószínűbb, hogy tartozik. Ennek megállapítása a \cite{Gasch2022} cikkben leírt módszerrel történik, miszerint először is normalizáljuk a növényfajok karakterisztikájával megkapott magasság és meredekség eloszlásokat, illetve normalizált távolságot veszünk a diffúziós pontoktól. Ezek mind egyfajta súlyozást adnak a meglévő növényfajok valószínéségre az adott egyednél. Egy egyed azon faj tagja lesz ezek után, amelynek valószínűségére a legnagyobb értéket kapta a program. 
+A lépés célja, hogy a  megadott diffúziós pontok, illetve magasság térkép alapján kiszámítsa, hogy az kezdeti halmazba tartozó egyedek mindegyike melyik fajhoz a legvalószínűbb, hogy tartozik. Ennek megállapítása a \cite{Gasch2022} cikkben leírt módszerrel történik, miszerint először is normalizáljuk a növényfajok karakterisztikájával megkapott magasság és meredekség eloszlásokat, illetve normalizált távolságot veszünk a diffúziós pontoktól. Ezek mind egyfajta súlyozást adnak a meglévő növényfajok valószínéségre az adott egyednél. Egy egyed azon faj tagja lesz ezek után, amelynek valószínűségére a legnagyobb értéket kapta a program. Ennek a valószínűségnek a kiszámításá a \ref{code:initial} kódrész végzi el. 
 
 \begin{listing}[H]
 \begin{minted}[fontsize=\footnotesize]{cpp}
     // FoliageGen/src/foliage/generator.cpp
-    //...
     for (auto& seed_idx : initial_set_indices_)
     {
         auto& seed = seeds_[seed_idx];
         auto offset = map_->GetBoundingBox().min();
         Coord2 seed_coord(std::round(seed.coordinate[0] - offset[0]), std::round(seed.coordinate[1] - offset[1]));
-
         size_t max_idx = 0;
         float max_value = 0.f;
-
-        // ...
-
         for (size_t attr_idx = 0; attr_idx < attributes_.size(); attr_idx++)
         {
             auto attr = attributes_[attr_idx];
             auto height_w_normalized = 1.f;
             auto slope_w_normalized = 1.f;
             auto diff_w = 0.f;
-
             float height_c = 1.f;
             float slope_c = 1.f;
             float diff_c = 1.f;
-
             if (height_map_)
             {
                 auto height_w = attr.elevation.CalcDistribution(height_map_-> HeightAt(seed_coord));
@@ -450,7 +429,6 @@ A lépés célja, hogy a  megadott diffúziós pontok, illetve magasság térké
                 slope_w_normalized = (slope_extremities_per_species[attr_idx].max - slope_w) / (
                     slope_extremities_per_species[attr_idx].max - slope_extremities_per_species[attr_idx].min);
             }
-
             for (auto zone : diffusion_zones_)
             {
                 if (zone.id == attr_idx)
@@ -462,22 +440,18 @@ A lépés célja, hogy a  megadott diffúziós pontok, illetve magasság térké
                         diff_w = val;
                 }
             }
-
             float value = height_w_normalized * height_c + slope_w_normalized * slope_c + diff_w * diff_c;
-
             if (value > max_value)
             {
                 max_value = value;
                 max_idx = attr_idx;
             }
         }
-
         seed.species_id = max_idx;
-        //...
     }
-  //...
 \end{minted}
 \caption{A kezdeti halmaz egyedei a térbeli helyzetükből kiindulóan a legnagyobb valószínűségű faj tagjának vannak véve.}
+\label{code:initial}
 \end{listing}
 
 \subsection{Szomszédossági besorolás}
@@ -574,19 +548,23 @@ A program ezen maximalizációt az AlgLib nevű, numerikus algoritmusok implemen
 
 
 
-\section{Növényzet tárolása}
+\pagebreak
+\section{Növényzetek tárolása}
 A növényzet összeállításának befejeztével a generáló program összeállítja annk megjelenítéséhez szükséges adatok. Ez összeségében a növényzet egyedeinek listáját, a növényzetet alkotó fajok listáját, az raszterizált térképet, a magasság térképet, illetve a térkép dimenzióbeli paramétereit foglalja magában. A program bezárása előtt a felhasznált erőforrásokat felszabadítja, majd a felhasználói réteg visszakapja az irányítást.
 
 Ezek után a felhasználónak lehetősége van a generált konfigárció betöltésére, amely az előzőleg  tartalmazott adatok elérési útvonalát tárolja. Annak érdekében azonban, hogy a felhasználó szabadon állíthassa át az előzőleg futtatott generáláshoz felhasznált adatokat anélkül, hogy befolyásolná az így korábban elkészült konfigurációnak beállításait, a program mindig egy másolatot készült a felhasznált fájlokról. Ezeket a másolatokat a program saját magának lefoglalt könyvtárban tárolja.
 
-\section{Növényzet megjelenítése}
+\section{Növényzetek renderelése}
 
 A vegetáció megjelenítéséhez a Godot játékmotor render szerverét használja fel a program, amivel akár a növényzet egészét is megtudja jeleníteni a program. A növényzet megjelenítése jelenleg egy távolság alapú, ún. "level-of-detail" optimalizációt alkalmaz annak érdekében, hogy minél több egyedet tudjon renderelni a program. Ezt az egyedeknek beállított maximum láthatósági távolsággal oldja meg motor, amellyel az esetlegesen túl messze lévő objektumokat nem rendereli a szerver. Ez olyan eseteknél igazán fontos, ahol az egész térkép látszódik, és így több tízezer növény és renderelve lenne.
-Továbbá csakis egy adott, kamerától való távolságon belül használ a program nagyobb minőségű testhálókat, hiszen a különböző részletek ezeknél úgy is elveszne adott távolságokon túl. Ehelyett így egy ún. "billboard" módszerrel megoldott, a kamera felé irányított textúrát tölt be a program. Ezeknek megjelenítése ilyenkor nyilvánvalóan kevesebb erőforrást igényel, továbbáb adott távolságokon belül a kevésbé is észrevehetőek az textúra és a testháló között látható különbségek. 
+Továbbá csakis egy adott, kamerától való távolságon belül használ a program nagyobb minőségű testhálókat, hiszen a különböző részletek ezeknél úgy is elveszne adott távolságokon túl. Ehelyett így egy ún. "billboard" módszerrel megoldott, a kamera felé irányított textúrát tölt be a program a \ref{fig:lod} képen látható módon. Ezeknek megjelenítése ilyenkor kevesebb erőforrást igényel, illetve adott távolságokon túl kevésbé észrevehetőek a textúra és testháló között érzékelhető különbségek a felhasználók által.
 
-\todo{
-  Visibility code ide lehet, mert az még egészen érdekes tud lenni
-}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width = 0.5\textwidth, frame]{images/LevelOfDetail.jpg}
+  \caption{A "level-of-detail" változásának határa. A kép alsó részében részletességű testhálók vannak alkalmazva, míg a kép felső részében már "billboard" textúrák láthatóak.}
+  \label{fig:lod}
+\end{figure}
 
 Mint korábban az említve lett, jelenleg az alkalmazott testhálók által reprezentált fajok, illetve a generálásban felhasznált fajok között nincsen kapcsolat. A vegetáció valóságosabb vizualizálásához azonban ez mindenféleképpen egy olyan terület, amelyen a jövőben többféle módon is javítani lehetne.   
 A növényzet diverzebbnek ható megjelenítésére jövőbeli megoldás lenne például egy összetettebb adatbázis rendszer készítése, ahol a különböző fajokhoz a valósághoz hűbb reprezentációk vannak előre elkészítve az alkalmazás számára. Továbbá egy másik megoldás lenne a testhálók procedurális generálása a program futása közben, amelyre szintúgy több jelenlegi megoldás is létezik. Bármelyik implementálásával egy vizuálisan érdekesebb élményt tudna az applikáció adni a felhasználónak, azonban mindenféleképpen érdemes az alkalmazott megoldások gépi erőforrás igényeit is megvizsgálni.
