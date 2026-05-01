@@ -54,24 +54,26 @@ A szoftver továbbá az alábbi specifikációjú gépen lett le tesztelve:
 Az elkészült applikáció ezen kívül egyéb, objektívan alacsonyabb teljesítménnyel rendelkező hardveren is futtatható lehet, azonban használatának minőségéről és az adott eredményeknek pontosságáról nem lehet garanciát vállalni. 
 
 \subsection{Szoftver telepítése}
-Az előre összecsomagolt bináris állományok segítségével a szoftver rendkívül egyszerűen használható a fentebb megadott platformok esetében.
+Az előre csomagolt bináris állományok segítségével a szoftver rendkívül egyszerűen használható a fentebb megadott platformok esetében.
 
+Támogatott Linux operációs rendszeren való futtatáshoz:
 \begin{enumerate}
     \itemsep0em
-    \item\label{step:first} Töltse le a felhasználó a tömörített állományt a \todo{LINK}
-    \item Bontsa ki a tömörített fájlcsomagot.
-    \item Navigáljon a kibontott könvytárhoz. \todo{Windows} Windows felhasználó esetén  \todo{Linux}
-    \item Indítsa el \todo{program neve}
+
+    \item\label{step:first} Töltse le a felhasználó  tömörített állományt a következő linkről: \href{https://ikelte-my.sharepoint.com/:u:/g/personal/aqij3g_inf_elte_hu/IQAKX4wdjd_TRq4KHYV9FE2-AYfOyQIMprDvK9gwU997Bro?e=OyAabH}{OneDrive link a Linux bináris állományhoz} vagy \todo{github release} 
+    \item Bontsa ki a tömörített fájlcsomagot, majd navigáljon a kibontott mappába terminál segítségével.
+    \item Ahhoz, hogy sikeresen futtassa a programot, győződjön meg arról, hogy a mind a "ProceduralFoliageGenerator.x86_64", mind a "Generator" nevű mappában található "App" futtatható állományként van beállítva.
+    \item Indítsa el a "ProcedrualFoliageGenerator.x86_64" nevű programot, vagy futtassa terminálból.
 \end{enumerate}
 
-\todo{Lehet felhasználótol nem kéne ezt elvárni}
-% Amennyiben nincsen az felhasználó által használt operációs rendszerhez előre lefordított programcsomag, a következő lépésekben megpróbálhatja saját magának összeállítani. Fontos, hogy semmi sem garantálja, hogy a felhasználó rendszerén sikeresen végre hajtható a folyamat.
+Amennyiben nincsen a felhasználó által használt operációs rendszeren a generátor program nem lefuttatható, a következő lépésekben kísérelheti meg saját magának lefordítani a program réteget. Fontos, hogy semmi sem garantálja, hogy a felhasználó rendszerén sikeresen végre hajtható a folyamat az alábbi lépésekkel, és lehetséges, hogy egyéb műveletek is szükségesek a program lefordítására.
 
-% \begin{enumerate}
-%     \itemsep0em
-%     \item Navigáljon a program \todo{github link} kódbázisát tartalmazó weboldalra, majd a képen mutatott módon töltse le tömörített formában a forráskódot.
-%     \item Bontsa ki a forráskódot tartalmazó tömörített állományt.
-% \end{enumerate}
+Generátor program installálása:
+\begin{itemize}
+    \item 
+    \item 
+\end{itemize}
+
 
 \pagebreak
 \section{Szoftver navigálása és használata}
@@ -138,8 +140,8 @@ Az generáció során elkészített és később megjelenített textúrák kül�
     \label{fig:betoltes_ablak}
 \end{figure}
 
-A "Settings" feliratú gombbal való interakció során képes a felhasználó egy harmadik fajta lebegő ablakot előhozni, ahol lehetősége van a program valamennyi paraméterét megtekinteni és átállítani elsősorban teszteleséi célokból.
-
+A "Settings" feliratú gombbal való interakció során képes a felhasználó egy harmadik fajta lebegő ablakot előhozni, ahol lehetősége van a program valamennyi paraméterét megtekinteni és beállítani. 
+Többek között a "Vegetation generator executable" mező átállítása segítségével képes a felhasználó a generátor program elérési útvonalát átállítani. Ez abban az esetben fontos, ha a felhasználó saját magának fordította le a futtatható generátor programot, és így az így lefordított bináris állományt szeretné, hogy a program használja a továbbiakban. 
 Továbbá az "Options" nevezetű legördülő menü segítségével képes a felhasználó a programból biztonságosan kilépni az "Exit" opcióra kattintva.
 
 
